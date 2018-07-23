@@ -17,7 +17,9 @@ namespace PortfolioTracker
         {
             IEnumerable<Asset> assets = _portfolioStore.Assets;
 
-            return $"You have {string.Join(", ", assets)} shares";
+            return _portfolioStore.HasAssets 
+                ? $"You have {string.Join(", ", assets)} shares" 
+                : $"You have no shares";
         }
     }
 }

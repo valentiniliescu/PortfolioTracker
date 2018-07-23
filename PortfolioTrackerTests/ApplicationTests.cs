@@ -26,5 +26,15 @@ namespace PortfolioTrackerTests
 
             application.Render().Should().Be("You have 100 MSFT, 10 AAPL shares");
         }
+
+        [TestMethod]
+        public void Render_should_return_a_message_describing_the_portfolio_when_it_has_no_assets()
+        {
+            var assets = new Asset[0];
+            var portfolioStore = new PortfolioStore(assets);
+            var application = new Application(portfolioStore);
+
+            application.Render().Should().Be("You have no shares");
+        }
     }
 }

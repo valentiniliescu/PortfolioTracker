@@ -14,5 +14,7 @@ namespace PortfolioTracker
         }
 
         public IEnumerable<Asset> Assets => _assets;
+
+        public bool HasAssets => _assets.Count > 0;
     }
 }
