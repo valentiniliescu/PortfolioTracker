@@ -1,19 +1,18 @@
 ﻿using System;
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PortfolioTracker
 {
+    [ExcludeFromCodeCoverage]
     internal static class Program
     {
         private static void Main()
         {
-            Console.WriteLine(HelloWorld());
-        }
+            var assets = new Asset[0];
+            var portfolioStore = new PortfolioStore(assets);
+            var application = new Application(portfolioStore);
 
-        [Pure]
-        private static string HelloWorld()
-        {
-            return "Hello " + "world!";
+            Console.WriteLine(application.Render());
         }
     }
 }

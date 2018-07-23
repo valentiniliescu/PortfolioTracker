@@ -34,7 +34,7 @@ namespace PortfolioTrackerTests
             var portfolioStore = new PortfolioStore(assets);
             var application = new Application(portfolioStore);
 
-            application.Render().Should().Be("You have no shares");
+            application.Render().Should().Be("You have no assets");
         }
     }
 }

@@ -19,7 +19,7 @@ namespace PortfolioTracker
 
             return _portfolioStore.HasAssets 
                 ? $"You have {string.Join(", ", assets)} shares" 
-                : $"You have no shares";
+                : "You have no assets";
         }
     }
 }
