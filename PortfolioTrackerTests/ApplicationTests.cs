@@ -12,7 +12,7 @@ namespace PortfolioTrackerTests
         {
             var portfolioStore = new PortfolioStore();
             var application = new Application(portfolioStore);
-            portfolioStore.AddAsset("MSFT", 100);
+            portfolioStore.AddAsset(new Asset("MSFT", 100));
 
             application.Render().Should().Be("You have 100 MSFT shares");
         }

@@ -11,7 +11,7 @@
 
         public string Render()
         {
-            return $"You have {_portfolioStore.Amount} {_portfolioStore.Symbol} shares";
+            return $"You have {_portfolioStore.Asset.Amount} {_portfolioStore.Asset.Symbol} shares";
         }
     }
 }

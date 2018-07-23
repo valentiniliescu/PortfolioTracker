@@ -2,13 +2,11 @@
 {
     public class PortfolioStore
     {
-        public string Symbol { get; private set; }
-        public decimal Amount { get; private set; }
+        public Asset Asset { get; private set; }
 
-        public void AddAsset(string symbol, decimal amount)
+        public void AddAsset(Asset asset)
         {
-            Symbol = symbol;
-            Amount = amount;
+            Asset = asset;
         }
     }
 }
