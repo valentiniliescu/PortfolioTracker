@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace PortfolioTracker
 {
@@ -14,7 +15,9 @@ namespace PortfolioTracker
         [Pure]
         public string Render()
         {
-            return $"You have {_portfolioStore.Asset.Amount} {_portfolioStore.Asset.Symbol} shares";
+            IEnumerable<Asset> assets = _portfolioStore.Assets;
+
+            return $"You have {string.Join(", ", assets)} shares";
         }
     }
 }

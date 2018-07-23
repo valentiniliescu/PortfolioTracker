@@ -1,14 +1,18 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 
 namespace PortfolioTracker
 {
     public class PortfolioStore
     {
-        public Asset Asset { get; private set; }
+        private readonly List<Asset> _assets;
 
-        public void AddAsset([NotNull] Asset asset)
+        public PortfolioStore([NotNull] IEnumerable<Asset> assets)
         {
-            Asset = asset;
+            _assets = assets.ToList();
         }
+
+        public IEnumerable<Asset> Assets => _assets;
     }
 }
