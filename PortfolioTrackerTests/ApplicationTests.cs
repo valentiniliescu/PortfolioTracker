@@ -14,6 +14,7 @@ namespace PortfolioTrackerTests
             var portfolioStore = new PortfolioStore(assets);
             var application = new Application(portfolioStore);
 
+            // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have 100 MSFT shares");
         }
 
@@ -24,6 +25,7 @@ namespace PortfolioTrackerTests
             var portfolioStore = new PortfolioStore(assets);
             var application = new Application(portfolioStore);
 
+            // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have 100 MSFT, 10 AAPL shares");
         }
 
@@ -34,6 +36,7 @@ namespace PortfolioTrackerTests
             var portfolioStore = new PortfolioStore(assets);
             var application = new Application(portfolioStore);
 
+            // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have no assets");
         }
     }
