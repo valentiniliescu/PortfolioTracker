@@ -10,7 +10,7 @@ namespace PortfolioTracker
         private static void Main()
         {
             var assets = new Asset[0];
-            var portfolioStore = new PortfolioStore(assets);
+            var portfolioStore = new Portfolio(assets);
             var application = new Application(portfolioStore);
 
             var wpfApplication = new System.Windows.Application();

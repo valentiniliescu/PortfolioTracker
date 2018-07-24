@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace PortfolioTracker
 {
-    public class PortfolioStore
+    public class Portfolio
     {
         [NotNull] [ItemNotNull] private readonly List<Asset> _assets;
 
-        public PortfolioStore([NotNull] [ItemNotNull] IEnumerable<Asset> assets)
+        public Portfolio([NotNull] [ItemNotNull] IEnumerable<Asset> assets)
         {
             _assets = assets.ToList();
         }

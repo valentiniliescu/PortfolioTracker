@@ -11,8 +11,8 @@ namespace PortfolioTrackerTests
         public void Render_should_return_a_message_describing_the_portfolio_when_it_has_a_single_asset()
         {
             var assets = new[] {new Asset("MSFT", 100)};
-            var portfolioStore = new PortfolioStore(assets);
-            var application = new Application(portfolioStore);
+            var portfolio = new Portfolio(assets);
+            var application = new Application(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have 100 MSFT shares");
@@ -22,8 +22,8 @@ namespace PortfolioTrackerTests
         public void Render_should_return_a_message_describing_the_portfolio_when_it_has_multiple_assets()
         {
             var assets = new[] {new Asset("MSFT", 100), new Asset("AAPL", 10)};
-            var portfolioStore = new PortfolioStore(assets);
-            var application = new Application(portfolioStore);
+            var portfolio = new Portfolio(assets);
+            var application = new Application(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have 100 MSFT, 10 AAPL shares");
@@ -33,8 +33,8 @@ namespace PortfolioTrackerTests
         public void Render_should_return_a_message_describing_the_portfolio_when_it_has_no_assets()
         {
             var assets = new Asset[0];
-            var portfolioStore = new PortfolioStore(assets);
-            var application = new Application(portfolioStore);
+            var portfolio = new Portfolio(assets);
+            var application = new Application(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             application.Render().Should().Be("You have no assets");

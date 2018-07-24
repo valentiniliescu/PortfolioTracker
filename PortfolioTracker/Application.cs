@@ -5,20 +5,20 @@ namespace PortfolioTracker
 {
     public class Application
     {
-        [NotNull] private readonly PortfolioStore _portfolioStore;
+        [NotNull] private readonly Portfolio _portfolio;
 
-        public Application([NotNull] PortfolioStore portfolioStore)
+        public Application([NotNull] Portfolio portfolio)
         {
-            _portfolioStore = portfolioStore;
+            _portfolio = portfolio;
         }
 
         [Pure]
         [NotNull]
         public string Render()
         {
-            IEnumerable<Asset> assets = _portfolioStore.Assets;
+            IEnumerable<Asset> assets = _portfolio.Assets;
 
-            return _portfolioStore.HasAssets
+            return _portfolio.HasAssets
                 ? $"You have {string.Join(", ", assets)} shares"
                 : "You have no assets";
         }
