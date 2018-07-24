@@ -6,13 +6,15 @@ namespace PortfolioTracker
     [ExcludeFromCodeCoverage]
     internal static class Program
     {
+        [STAThread]
         private static void Main()
         {
             var assets = new Asset[0];
             var portfolioStore = new PortfolioStore(assets);
             var application = new Application(portfolioStore);
 
-            Console.WriteLine(application.Render());
+            var wpfApplication = new System.Windows.Application();
+            wpfApplication.Run(new MainWindow(application));
         }
     }
 }
