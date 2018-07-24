@@ -5,39 +5,39 @@ using PortfolioTracker;
 namespace PortfolioTrackerTests
 {
     [TestClass]
-    public class ApplicationTests
+    public class ViewModelTests
     {
         [TestMethod]
-        public void Render_should_return_a_message_describing_the_portfolio_when_it_has_a_single_asset()
+        public void Portfolio_description_when_it_has_a_single_asset()
         {
             var assets = new[] {new Asset("MSFT", 100)};
             var portfolio = new Portfolio(assets);
-            var application = new Application(portfolio);
+            var viewModel = new ViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
-            application.Render().Should().Be("You have 100 MSFT shares");
+            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
         }
 
         [TestMethod]
-        public void Render_should_return_a_message_describing_the_portfolio_when_it_has_multiple_assets()
+        public void Portfolio_description_when_it_has_multiple_assets()
         {
             var assets = new[] {new Asset("MSFT", 100), new Asset("AAPL", 10)};
             var portfolio = new Portfolio(assets);
-            var application = new Application(portfolio);
+            var viewModel = new ViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
-            application.Render().Should().Be("You have 100 MSFT, 10 AAPL shares");
+            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT, 10 AAPL shares");
         }
 
         [TestMethod]
-        public void Render_should_return_a_message_describing_the_portfolio_when_it_has_no_assets()
+        public void Portfolio_description_when_it_has_no_assets()
         {
             var assets = new Asset[0];
             var portfolio = new Portfolio(assets);
-            var application = new Application(portfolio);
+            var viewModel = new ViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
-            application.Render().Should().Be("You have no assets");
+            viewModel.PortfolioDescription.Should().Be("You have no assets");
         }
     }
 }

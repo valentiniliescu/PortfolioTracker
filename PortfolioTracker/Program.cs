@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 
 namespace PortfolioTracker
 {
@@ -10,11 +11,13 @@ namespace PortfolioTracker
         private static void Main()
         {
             var assets = new Asset[0];
-            var portfolioStore = new Portfolio(assets);
-            var application = new Application(portfolioStore);
+            var portfolio = new Portfolio(assets);
+            var viewModel = new ViewModel(portfolio);
 
-            var wpfApplication = new System.Windows.Application();
-            wpfApplication.Run(new MainWindow(application));
+            var mainWindow = new MainWindow(viewModel);
+
+            var application = new Application();
+            application.Run(mainWindow);
         }
     }
 }
