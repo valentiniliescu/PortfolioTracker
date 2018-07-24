@@ -5,5 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Portfolio Tracker" Height="450" Width="800">
-    <TextBlock Text="{Binding Path=PortfolioDescription}" />
+    <!-- ReSharper disable once Xaml.BindingWithoutContextNotResolved -->
+    <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
 </Window>
