@@ -20,7 +20,7 @@ namespace PortfolioTracker.ViewModel
         {
             get
             {
-                if (_portfolio == null)
+                if (!IsPortfolioLoaded)
                 {
                     return null;
                 }
@@ -36,6 +36,8 @@ namespace PortfolioTracker.ViewModel
 
         public string NewAssetSymbol { get; set; }
         public decimal NewAssetAmount { get; set; }
+
+        private bool IsPortfolioLoaded => _portfolio != null;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -57,9 +59,9 @@ namespace PortfolioTracker.ViewModel
 
         public void AddAsset()
         {
-            if (NewAssetSymbol != null)
+            if (IsPortfolioLoaded && NewAssetSymbol != null)
             {
-                _portfolio?.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+                _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
             }
         }
     }
