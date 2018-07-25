@@ -6,9 +6,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:helpers="clr-namespace:PortfolioTracker.Helpers"
         mc:Ignorable="d"
-        Title="Portfolio Tracker" Height="450" Width="800" 
-        Loaded="{helpers:EventBinding Load}" 
+        Title="Portfolio Tracker" Height="450" Width="800"
+        Loaded="{helpers:EventBinding Load}"
         Closing="{helpers:EventBinding Save}">
-    <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <TextBox Name="NewAssetSymbolTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetSymbol}" />
+            <TextBox Name="NewAssetAmountTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetAmount}" />
+            <Button Click="{helpers:EventBinding AddAsset}">Add asset</Button>
+        </StackPanel>
+        <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
+    </DockPanel>
 </Window>
 <!-- ReSharper restore Xaml.BindingWithoutContextNotResolved -->
