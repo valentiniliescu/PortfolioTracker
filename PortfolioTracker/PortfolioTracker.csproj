@@ -45,6 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetStore.cs" />
     <Compile Include="EventBindingExtension.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="Asset.cs" />

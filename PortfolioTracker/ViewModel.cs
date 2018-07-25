@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using JetBrains.Annotations;
 
 namespace PortfolioTracker
 {
-    public class ViewModel
+    public sealed class ViewModel : INotifyPropertyChanged
     {
         [NotNull] private readonly Portfolio _portfolio;
 
@@ -12,27 +12,42 @@ namespace PortfolioTracker
             _portfolio = portfolio;
         }
 
-        [NotNull]
+        [CanBeNull]
         public string PortfolioDescription
         {
             get
             {
-                IEnumerable<Asset> assets = _portfolio.Assets;
+                if (!_portfolio.AreAssetsLoaded)
+                {
+                    return null;
+                }
 
-                return _portfolio.HasAssets
-                    ? $"You have {string.Join(", ", assets)} shares"
-                    : "You have no assets";
+                if (_portfolio.HasAssets)
+                {
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    return $"You have {string.Join(", ", _portfolio.Assets)} shares";
+                }
+
+                return "You have no assets";
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void Load()
         {
-            
+            _portfolio.Load();
+            OnPropertyChanged(nameof(PortfolioDescription));
         }
 
         public void Save()
         {
-            
+        }
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PortfolioTracker
 {
-    public class Asset
+    public sealed class Asset
     {
         public Asset([NotNull] string symbol, decimal amount)
         {
@@ -10,8 +10,8 @@ namespace PortfolioTracker
             Amount = amount;
         }
 
-        public string Symbol { get; }
-        public decimal Amount { get; }
+        private string Symbol { get; }
+        private decimal Amount { get; }
 
         [Pure]
         public override string ToString() => $"{Amount} {Symbol}";

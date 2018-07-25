@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker;
 
@@ -38,6 +39,29 @@ namespace PortfolioTrackerTests
 
             // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have no assets");
+        }
+
+        [TestMethod]
+        public void Loading_assets_should_change_the_portfolio_description_and_fire_property_changed_event()
+        {
+            var assetStore = new AssetStore();
+            var portfolio = new Portfolio(assetStore);
+            var viewModel = new ViewModel(portfolio);
+
+            // ReSharper disable once PossibleNullReferenceException
+            viewModel.PortfolioDescription.Should().BeNull();
+
+            using (IMonitor<ViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.Load();
+
+                // ReSharper disable PossibleNullReferenceException
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
+                // ReSharper restore PossibleNullReferenceException
+
+                // ReSharper disable once PossibleNullReferenceException
+                viewModel.PortfolioDescription.Should().Be("You have no assets");
+            }
         }
     }
 }

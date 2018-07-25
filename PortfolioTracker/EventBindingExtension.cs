@@ -8,7 +8,7 @@ namespace PortfolioTracker
 {
     // allows to bind WPF events directly to ViewModel methods
     // inspired by https://www.thomaslevesque.com/2011/09/23/wpf-4-5-subscribing-to-an-event-using-a-markup-extension/
-    public class EventBindingExtension : MarkupExtension
+    public sealed class EventBindingExtension : MarkupExtension
     {
         public EventBindingExtension([NotNull] string methodName)
         {
