@@ -20,12 +20,13 @@ namespace PortfolioTracker.ViewModel
         {
             get
             {
-                if (!IsPortfolioLoaded)
+                if (_portfolio == null)
                 {
                     return null;
                 }
 
                 if (_portfolio.HasAssets)
+
                 {
                     return $"You have {string.Join(", ", _portfolio.Assets)} shares";
                 }
@@ -34,10 +35,8 @@ namespace PortfolioTracker.ViewModel
             }
         }
 
-        public string NewAssetSymbol { get; set; }
-        public decimal NewAssetAmount { get; set; }
-
-        private bool IsPortfolioLoaded => _portfolio != null;
+        public string NewAssetSymbol { private get; set; }
+        public decimal NewAssetAmount { private get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,6 +48,10 @@ namespace PortfolioTracker.ViewModel
 
         public void Save()
         {
+            if (_portfolio != null)
+            {
+                _portfolioStore.Save(_portfolio);
+            }
         }
 
         [NotifyPropertyChangedInvocator]
@@ -59,7 +62,7 @@ namespace PortfolioTracker.ViewModel
 
         public void AddAsset()
         {
-            if (IsPortfolioLoaded && NewAssetSymbol != null)
+            if (_portfolio != null && NewAssetSymbol != null)
             {
                 _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
                 OnPropertyChanged(nameof(PortfolioDescription));

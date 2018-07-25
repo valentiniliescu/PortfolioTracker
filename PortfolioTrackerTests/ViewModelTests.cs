@@ -89,5 +89,28 @@ namespace PortfolioTrackerTests
                 // ReSharper restore PossibleNullReferenceException
             }
         }
+
+        [TestMethod]
+        public void Saving_should_save_the_assets_till_next_load()
+        {
+            var portfolioStore = new PortfolioStore();
+            var viewModel = new MainViewModel(portfolioStore);
+            viewModel.Load();
+
+            viewModel.NewAssetSymbol = "MSFT";
+            viewModel.NewAssetAmount = 100;
+            viewModel.AddAsset();
+
+            viewModel.Save();
+
+            viewModel.NewAssetSymbol = "AAPL";
+            viewModel.NewAssetAmount = 10;
+            viewModel.AddAsset();
+
+            viewModel.Load();
+
+            // ReSharper disable once PossibleNullReferenceException
+            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
+        }
     }
 }
