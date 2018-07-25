@@ -40,5 +40,7 @@ namespace PortfolioTrackerTests
             textBlockBinding.Path.Path.Should().Be(nameof(ViewModel.PortfolioDescription));
             // ReSharper restore PossibleNullReferenceException
         }
+
+        // TODO: test that events are binded to ViewModel methods
     }
 }

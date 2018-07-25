@@ -6,8 +6,8 @@ namespace PortfolioTracker
     {
         public MainWindow([NotNull] ViewModel viewModel)
         {
-            InitializeComponent();
             DataContext = viewModel;
+            InitializeComponent();
         }
     }
 }

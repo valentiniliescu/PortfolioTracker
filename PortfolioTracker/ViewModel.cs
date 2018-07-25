@@ -24,5 +24,15 @@ namespace PortfolioTracker
                     : "You have no assets";
             }
         }
+
+        public void Load()
+        {
+            
+        }
+
+        public void Save()
+        {
+            
+        }
     }
 }
