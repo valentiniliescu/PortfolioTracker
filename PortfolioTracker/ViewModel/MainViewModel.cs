@@ -62,6 +62,7 @@ namespace PortfolioTracker.ViewModel
             if (IsPortfolioLoaded && NewAssetSymbol != null)
             {
                 _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+                OnPropertyChanged(nameof(PortfolioDescription));
             }
         }
     }

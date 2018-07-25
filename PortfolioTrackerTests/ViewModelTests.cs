@@ -71,5 +71,23 @@ namespace PortfolioTrackerTests
                 viewModel.PortfolioDescription.Should().Be("You have no assets");
             }
         }
+
+        [TestMethod]
+        public void Adding_an_asset_should_fire_property_changed_event()
+        {
+            var viewModel = new MainViewModel(new PortfolioStore());
+            viewModel.Load();
+
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.NewAssetSymbol = "MSFT";
+                viewModel.NewAssetAmount = 100;
+                viewModel.AddAsset();
+
+                // ReSharper disable PossibleNullReferenceException
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
+                // ReSharper restore PossibleNullReferenceException
+            }
+        }
     }
 }
