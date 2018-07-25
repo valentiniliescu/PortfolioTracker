@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Markup;
 using JetBrains.Annotations;
 
-namespace PortfolioTracker
+namespace PortfolioTracker.Helpers
 {
     // allows to bind WPF events directly to ViewModel methods
     // inspired by https://www.thomaslevesque.com/2011/09/23/wpf-4-5-subscribing-to-an-event-using-a-markup-extension/

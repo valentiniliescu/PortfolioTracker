@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
 using JetBrains.Annotations;
+using PortfolioTracker.Model;
 
-namespace PortfolioTracker
+namespace PortfolioTracker.ViewModel
 {
-    public sealed class ViewModel : INotifyPropertyChanged
+    public sealed class MainViewModel : INotifyPropertyChanged
     {
         [NotNull] private readonly Portfolio _portfolio;
 
-        public ViewModel([NotNull] Portfolio portfolio)
+        public MainViewModel([NotNull] Portfolio portfolio)
         {
             _portfolio = portfolio;
         }

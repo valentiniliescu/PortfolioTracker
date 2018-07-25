@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PortfolioTracker;
+using PortfolioTracker.Model;
+using PortfolioTracker.PAS;
+using PortfolioTracker.ViewModel;
 
 namespace PortfolioTrackerTests
 {
@@ -13,7 +15,7 @@ namespace PortfolioTrackerTests
         {
             var assets = new[] {new Asset("MSFT", 100)};
             var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
@@ -24,7 +26,7 @@ namespace PortfolioTrackerTests
         {
             var assets = new[] {new Asset("MSFT", 100), new Asset("AAPL", 10)};
             var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT, 10 AAPL shares");
@@ -35,7 +37,7 @@ namespace PortfolioTrackerTests
         {
             var assets = new Asset[0];
             var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have no assets");
@@ -46,12 +48,12 @@ namespace PortfolioTrackerTests
         {
             var assetStore = new AssetStore();
             var portfolio = new Portfolio(assetStore);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().BeNull();
 
-            using (IMonitor<ViewModel> viewModelMonitored = viewModel.Monitor())
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
                 viewModel.Load();
 

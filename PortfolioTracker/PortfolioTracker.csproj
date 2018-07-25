@@ -45,25 +45,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssetStore.cs" />
-    <Compile Include="EventBindingExtension.cs" />
-    <Compile Include="ViewModel.cs" />
-    <Compile Include="Asset.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Helpers\EventBindingExtension.cs" />
+    <Compile Include="Model\Asset.cs" />
+    <Compile Include="Model\Portfolio.cs" />
+    <Compile Include="PAS\AssetStore.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Portfolio.cs" />
-    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

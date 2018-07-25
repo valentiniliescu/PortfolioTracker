@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
+using PortfolioTracker.Model;
+using PortfolioTracker.PAS;
+using PortfolioTracker.View;
+using PortfolioTracker.ViewModel;
 
 namespace PortfolioTracker
 {
@@ -10,9 +14,9 @@ namespace PortfolioTracker
         [STAThread]
         private static void Main()
         {
-            var assets = new Asset[0];
-            var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var assetStore = new AssetStore();
+            var portfolio = new Portfolio(assetStore);
+            var viewModel = new MainViewModel(portfolio);
 
             var mainWindow = new MainWindow(viewModel);
 

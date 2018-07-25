@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace PortfolioTracker
+namespace PortfolioTracker.Model
 {
     public sealed class Asset
     {
@@ -14,6 +14,9 @@ namespace PortfolioTracker
         private decimal Amount { get; }
 
         [Pure]
-        public override string ToString() => $"{Amount} {Symbol}";
+        public override string ToString()
+        {
+            return $"{Amount} {Symbol}";
+        }
     }
 }

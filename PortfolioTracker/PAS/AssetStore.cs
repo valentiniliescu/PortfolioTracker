@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using PortfolioTracker.Model;
 
-namespace PortfolioTracker
+namespace PortfolioTracker.PAS
 {
     public sealed class AssetStore
     {

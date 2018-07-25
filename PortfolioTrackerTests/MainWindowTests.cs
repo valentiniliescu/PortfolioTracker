@@ -2,7 +2,9 @@
 using System.Windows.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PortfolioTracker;
+using PortfolioTracker.Model;
+using PortfolioTracker.View;
+using PortfolioTracker.ViewModel;
 
 namespace PortfolioTrackerTests
 {
@@ -14,7 +16,7 @@ namespace PortfolioTrackerTests
         {
             var assets = new Asset[0];
             var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             var window = new MainWindow(viewModel);
 
@@ -27,7 +29,7 @@ namespace PortfolioTrackerTests
         {
             var assets = new Asset[0];
             var portfolio = new Portfolio(assets);
-            var viewModel = new ViewModel(portfolio);
+            var viewModel = new MainViewModel(portfolio);
 
             var window = new MainWindow(viewModel);
 
@@ -37,7 +39,7 @@ namespace PortfolioTrackerTests
 
             // ReSharper disable PossibleNullReferenceException
             textBlockBinding.Should().NotBeNull();
-            textBlockBinding.Path.Path.Should().Be(nameof(ViewModel.PortfolioDescription));
+            textBlockBinding.Path.Path.Should().Be(nameof(MainViewModel.PortfolioDescription));
             // ReSharper restore PossibleNullReferenceException
         }
 

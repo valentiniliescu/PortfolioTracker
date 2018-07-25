@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using PortfolioTracker.PAS;
 
-namespace PortfolioTracker
+namespace PortfolioTracker.Model
 {
     public sealed class Portfolio
     {
-        [CanBeNull] [ItemNotNull] private List<Asset> _assets;
-
         [CanBeNull] private readonly AssetStore _assetStore;
+        [CanBeNull] [ItemNotNull] private List<Asset> _assets;
 
         public Portfolio([NotNull] [ItemNotNull] IEnumerable<Asset> assets)
         {
