@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
+using PortfolioTracker.PAS;
 
 namespace PortfolioTracker.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        [NotNull] private readonly Portfolio _portfolio;
+        [NotNull] private readonly PortfolioStore _portfolioStore;
+        [CanBeNull] private Portfolio _portfolio;
 
-        public MainViewModel([NotNull] Portfolio portfolio)
+        public MainViewModel([NotNull] PortfolioStore portfolioStore)
         {
-            _portfolio = portfolio;
+            _portfolioStore = portfolioStore;
         }
 
         [CanBeNull]
@@ -18,14 +20,13 @@ namespace PortfolioTracker.ViewModel
         {
             get
             {
-                if (!_portfolio.AreAssetsLoaded)
+                if (_portfolio == null)
                 {
                     return null;
                 }
 
                 if (_portfolio.HasAssets)
                 {
-                    // ReSharper disable once AssignNullToNotNullAttribute
                     return $"You have {string.Join(", ", _portfolio.Assets)} shares";
                 }
 
@@ -33,11 +34,14 @@ namespace PortfolioTracker.ViewModel
             }
         }
 
+        public string NewAssetSymbol { get; set; }
+        public decimal NewAssetAmount { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Load()
         {
-            _portfolio.Load();
+            _portfolio = _portfolioStore.Load();
             OnPropertyChanged(nameof(PortfolioDescription));
         }
 
@@ -49,6 +53,14 @@ namespace PortfolioTracker.ViewModel
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void AddAsset()
+        {
+            if (NewAssetSymbol != null)
+            {
+                _portfolio?.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+            }
         }
     }
 }

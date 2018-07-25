@@ -3,11 +3,11 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
-    public sealed class AssetStore
+    public sealed class PortfolioStore
     {
-        public List<Asset> Load()
+        public Portfolio Load()
         {
-            return new List<Asset>();
+            return new Portfolio(new List<Asset>());
         }
     }
 }

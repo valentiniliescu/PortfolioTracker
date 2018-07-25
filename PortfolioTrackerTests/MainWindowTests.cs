@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PortfolioTracker.Model;
+using PortfolioTracker.PAS;
 using PortfolioTracker.View;
 using PortfolioTracker.ViewModel;
 
@@ -14,9 +14,8 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Data_context_should_be_the_view_model()
         {
-            var assets = new Asset[0];
-            var portfolio = new Portfolio(assets);
-            var viewModel = new MainViewModel(portfolio);
+            var portfolioStore = new PortfolioStore();
+            var viewModel = new MainViewModel(portfolioStore);
 
             var window = new MainWindow(viewModel);
 
@@ -27,9 +26,8 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Main_text_block_should_be_bound_to_portfolio_description_of_view_model()
         {
-            var assets = new Asset[0];
-            var portfolio = new Portfolio(assets);
-            var viewModel = new MainViewModel(portfolio);
+            var portfolioStore = new PortfolioStore();
+            var viewModel = new MainViewModel(portfolioStore);
 
             var window = new MainWindow(viewModel);
 
