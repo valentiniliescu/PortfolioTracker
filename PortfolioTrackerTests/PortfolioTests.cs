@@ -83,6 +83,21 @@ namespace PortfolioTrackerTests
             // ReSharper restore PossibleNullReferenceException
         }
 
+        [TestMethod]
+        public void Adding_new_asset_with_zero_amount_should_be_merged()
+        {
+            var portfolio = new Portfolio(new Asset[0]);
+
+            portfolio.AddAsset(new Asset("MSFT", 20));
+            portfolio.AddAsset(new Asset("AAPL", 10));
+            portfolio.AddAsset(new Asset("MSFT", 0));
+
+            var expectedAssets = new[] {new Asset("MSFT", 20), new Asset("AAPL", 10)};
+            // ReSharper disable PossibleNullReferenceException
+            portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
+            // ReSharper restore PossibleNullReferenceException
+        }
+
         private static bool AssetEqualityComparison([NotNull] Asset asset1, [NotNull] Asset asset2)
         {
             return asset1.Symbol == asset2.Symbol &&
