@@ -10,8 +10,10 @@ namespace PortfolioTracker.Model
             Amount = amount;
         }
 
-        private string Symbol { get; }
-        private decimal Amount { get; }
+        [NotNull]
+        public string Symbol { get; }
+
+        public decimal Amount { get; }
 
         [Pure]
         public override string ToString()

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
     public sealed class PortfolioStore
     {
-        [NotNull] private Portfolio _portfolio = new Portfolio(new List<Asset>());
+        [NotNull] private Portfolio _portfolio = new Portfolio(new Asset[0]);
 
         [NotNull]
         public Portfolio Load()
