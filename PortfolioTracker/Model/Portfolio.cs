@@ -27,7 +27,7 @@ namespace PortfolioTracker.Model
                 decimal amount = newAsset.Amount + existingAsset.Amount;
                 if (amount < 0)
                 {
-                    throw new ArgumentException(nameof(newAsset));
+                    throw new InvalidOperationException("Cannot add an asset that will result in negative amount in portfolio");
                 }
 
                 if (amount == 0)
@@ -43,7 +43,7 @@ namespace PortfolioTracker.Model
             {
                 if (newAsset.Amount < 0)
                 {
-                    throw new ArgumentException(nameof(newAsset));
+                    throw new InvalidOperationException("Cannot add an asset that will result in negative amount in portfolio");
                 }
 
                 if (newAsset.Amount > 0)

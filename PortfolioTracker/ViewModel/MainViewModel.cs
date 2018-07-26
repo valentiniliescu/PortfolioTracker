@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
@@ -8,6 +9,7 @@ namespace PortfolioTracker.ViewModel
     public sealed class MainViewModel : INotifyPropertyChanged
     {
         [NotNull] private readonly PortfolioStore _portfolioStore;
+        [CanBeNull] private string _errorMessage;
         [CanBeNull] private Portfolio _portfolio;
 
         public MainViewModel([NotNull] PortfolioStore portfolioStore)
@@ -32,6 +34,17 @@ namespace PortfolioTracker.ViewModel
                 }
 
                 return "You have no assets";
+            }
+        }
+
+        [CanBeNull]
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            private set
+            {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 
@@ -64,8 +77,15 @@ namespace PortfolioTracker.ViewModel
         {
             if (_portfolio != null && NewAssetSymbol != null)
             {
-                _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
-                OnPropertyChanged(nameof(PortfolioDescription));
+                try
+                {
+                    _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+                    OnPropertyChanged(nameof(PortfolioDescription));
+                }
+                catch (Exception exception)
+                {
+                    ErrorMessage = exception.Message;
+                }
             }
         }
     }

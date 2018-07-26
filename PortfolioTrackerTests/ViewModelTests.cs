@@ -104,5 +104,25 @@ namespace PortfolioTrackerTests
 
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
         }
+
+        [TestMethod]
+        public void Adding_invalid_asset_should_set_error_message()
+        {
+            var portfolioStore = new PortfolioStore();
+            var viewModel = new MainViewModel(portfolioStore);
+            viewModel.Load();
+
+            viewModel.ErrorMessage.Should().BeNull();
+
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.NewAssetSymbol = "MSFT";
+                viewModel.NewAssetAmount = -10;
+                viewModel.AddAsset();
+
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
+                viewModelMonitored.Should().NotRaisePropertyChangeFor(vm => vm.PortfolioDescription);
+            }
+        }
     }
 }

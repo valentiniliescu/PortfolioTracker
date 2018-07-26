@@ -34,7 +34,7 @@ namespace PortfolioTrackerTests
 
             Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
 
-            action.Should().Throw<ArgumentException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace PortfolioTrackerTests
 
             Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
 
-            action.Should().Throw<ArgumentException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [TestMethod]

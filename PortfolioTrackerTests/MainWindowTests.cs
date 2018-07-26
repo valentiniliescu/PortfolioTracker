@@ -55,6 +55,16 @@ namespace PortfolioTrackerTests
             CheckViewModelBinding(window.NewAssetAmountTextBox, TextBox.TextProperty, nameof(MainViewModel.NewAssetAmount));
         }
 
+        [TestMethod]
+        public void Error_text_block_should_be_bound_to_error_message_of_view_model()
+        {
+            var viewModel = new MainViewModel(new PortfolioStore());
+
+            var window = new MainWindow(viewModel);
+
+            CheckViewModelBinding(window.ErrorTextBlock, TextBlock.TextProperty, nameof(MainViewModel.ErrorMessage));
+        }
+
         private static void CheckViewModelBinding(DependencyObject targetElement, DependencyProperty dependencyProperty, string propertyName)
         {
             Binding binding = BindingOperations.GetBinding(targetElement, dependencyProperty);
