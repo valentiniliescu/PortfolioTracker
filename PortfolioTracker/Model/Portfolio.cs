@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 
 namespace PortfolioTracker.Model
@@ -9,9 +8,13 @@ namespace PortfolioTracker.Model
     {
         [NotNull] private readonly Dictionary<string, Asset> _assets;
 
-        public Portfolio([NotNull] [ItemNotNull] IEnumerable<Asset> assets)
+        public Portfolio() : this(new Dictionary<string, Asset>())
         {
-            _assets = assets.ToDictionary(asset => asset.Symbol);
+        }
+
+        private Portfolio([NotNull] Dictionary<string, Asset> assets)
+        {
+            _assets = assets;
         }
 
         [NotNull]
@@ -19,6 +22,13 @@ namespace PortfolioTracker.Model
         public IEnumerable<Asset> Assets => _assets.Values;
 
         public bool HasAssets => _assets.Count > 0;
+
+        [Pure]
+        [NotNull]
+        public Portfolio Clone()
+        {
+            return new Portfolio(new Dictionary<string, Asset>(_assets));
+        }
 
         public void AddAsset([NotNull] Asset newAsset)
         {

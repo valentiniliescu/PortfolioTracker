@@ -5,17 +5,17 @@ namespace PortfolioTracker.PAS
 {
     public sealed class PortfolioStore
     {
-        [NotNull] private Portfolio _portfolio = new Portfolio(new Asset[0]);
+        [CanBeNull] private Portfolio _portfolio;
 
         [NotNull]
         public Portfolio Load()
         {
-            return _portfolio;
+            return _portfolio ?? (_portfolio = new Portfolio());
         }
 
         public void Save([NotNull] Portfolio portfolio)
         {
-            _portfolio = new Portfolio(portfolio.Assets);
+            _portfolio = portfolio.Clone();
         }
     }
 }
