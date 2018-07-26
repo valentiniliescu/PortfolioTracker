@@ -30,7 +30,14 @@ namespace PortfolioTracker.Model
                     throw new ArgumentException(nameof(newAsset));
                 }
 
-                _assets[newAsset.Symbol] = new Asset(newAsset.Symbol, amount);
+                if (amount == 0)
+                {
+                    _assets.Remove(newAsset.Symbol);
+                }
+                else
+                {
+                    _assets[newAsset.Symbol] = new Asset(newAsset.Symbol, amount);
+                }
             }
             else
             {
