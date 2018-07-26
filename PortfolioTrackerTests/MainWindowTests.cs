@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
@@ -10,6 +11,8 @@ using PortfolioTracker.ViewModel;
 namespace PortfolioTrackerTests
 {
     [TestClass]
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class MainWindowTests
     {
         [TestMethod]
@@ -19,7 +22,6 @@ namespace PortfolioTrackerTests
 
             var window = new MainWindow(viewModel);
 
-            // ReSharper disable once PossibleNullReferenceException
             window.DataContext.Should().Be(viewModel);
         }
 
@@ -55,14 +57,10 @@ namespace PortfolioTrackerTests
 
         private static void CheckViewModelBinding(DependencyObject targetElement, DependencyProperty dependencyProperty, string propertyName)
         {
-            // ReSharper disable AssignNullToNotNullAttribute
             Binding binding = BindingOperations.GetBinding(targetElement, dependencyProperty);
-            // ReSharper restore AssignNullToNotNullAttribute
 
-            // ReSharper disable PossibleNullReferenceException
             binding.Should().NotBeNull();
             binding.Path.Path.Should().Be(propertyName);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         // TODO: test that events are binded to ViewModel methods

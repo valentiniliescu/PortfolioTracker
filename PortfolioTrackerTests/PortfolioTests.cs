@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,6 +8,7 @@ using PortfolioTracker.Model;
 namespace PortfolioTrackerTests
 {
     [TestClass]
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public class PortfolioTests
     {
         [TestMethod]
@@ -19,9 +21,7 @@ namespace PortfolioTrackerTests
             portfolio.AddAsset(new Asset("MSFT", 20));
 
             var expectedAssets = new[] {new Asset("MSFT", 30), new Asset("AAPL", 10)};
-            // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -34,9 +34,7 @@ namespace PortfolioTrackerTests
 
             Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
 
-            // ReSharper disable PossibleNullReferenceException
             action.Should().Throw<ArgumentException>();
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -48,9 +46,7 @@ namespace PortfolioTrackerTests
 
             Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
 
-            // ReSharper disable PossibleNullReferenceException
             action.Should().Throw<ArgumentException>();
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -63,9 +59,7 @@ namespace PortfolioTrackerTests
             portfolio.AddAsset(new Asset("MSFT", -10));
 
             var expectedAssets = new[] {new Asset("MSFT", 10), new Asset("AAPL", 10)};
-            // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -78,9 +72,7 @@ namespace PortfolioTrackerTests
             portfolio.AddAsset(new Asset("MSFT", -20));
 
             var expectedAssets = new[] {new Asset("AAPL", 10)};
-            // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -93,9 +85,7 @@ namespace PortfolioTrackerTests
             portfolio.AddAsset(new Asset("MSFT", 0));
 
             var expectedAssets = new[] {new Asset("MSFT", 20), new Asset("AAPL", 10)};
-            // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [TestMethod]
@@ -107,9 +97,7 @@ namespace PortfolioTrackerTests
             portfolio.AddAsset(new Asset("MSFT", 0));
 
             var expectedAssets = new[] {new Asset("AAPL", 10)};
-            // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         private static bool AssetEqualityComparison([NotNull] Asset asset1, [NotNull] Asset asset2)

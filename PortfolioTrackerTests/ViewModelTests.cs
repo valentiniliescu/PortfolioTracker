@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.PAS;
@@ -7,6 +8,7 @@ using PortfolioTracker.ViewModel;
 namespace PortfolioTrackerTests
 {
     [TestClass]
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public class ViewModelTests
     {
         [TestMethod]
@@ -19,7 +21,6 @@ namespace PortfolioTrackerTests
             viewModel.NewAssetAmount = 100;
             viewModel.AddAsset();
 
-            // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
         }
 
@@ -37,7 +38,6 @@ namespace PortfolioTrackerTests
             viewModel.NewAssetAmount = 10;
             viewModel.AddAsset();
 
-            // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT, 10 AAPL shares");
         }
 
@@ -47,7 +47,6 @@ namespace PortfolioTrackerTests
             var viewModel = new MainViewModel(new PortfolioStore());
             viewModel.Load();
 
-            // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have no assets");
         }
 
@@ -56,18 +55,14 @@ namespace PortfolioTrackerTests
         {
             var viewModel = new MainViewModel(new PortfolioStore());
 
-            // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().BeNull();
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
                 viewModel.Load();
 
-                // ReSharper disable PossibleNullReferenceException
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-                // ReSharper restore PossibleNullReferenceException
 
-                // ReSharper disable once PossibleNullReferenceException
                 viewModel.PortfolioDescription.Should().Be("You have no assets");
             }
         }
@@ -84,9 +79,7 @@ namespace PortfolioTrackerTests
                 viewModel.NewAssetAmount = 100;
                 viewModel.AddAsset();
 
-                // ReSharper disable PossibleNullReferenceException
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-                // ReSharper restore PossibleNullReferenceException
             }
         }
 
@@ -109,7 +102,6 @@ namespace PortfolioTrackerTests
 
             viewModel.Load();
 
-            // ReSharper disable once PossibleNullReferenceException
             viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
         }
     }
