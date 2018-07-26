@@ -29,11 +29,16 @@ namespace PortfolioTracker.Model
                 {
                     throw new ArgumentException(nameof(newAsset));
                 }
-                
+
                 _assets[newAsset.Symbol] = new Asset(newAsset.Symbol, amount);
             }
             else
             {
+                if (newAsset.Amount < 0)
+                {
+                    throw new ArgumentException(nameof(newAsset));
+                }
+
                 _assets[newAsset.Symbol] = newAsset;
             }
         }
