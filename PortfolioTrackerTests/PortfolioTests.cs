@@ -53,6 +53,21 @@ namespace PortfolioTrackerTests
             // ReSharper restore PossibleNullReferenceException
         }
 
+        [TestMethod]
+        public void Adding_asset_with_negative_amount_is_allowed_if_the_merged_asset_has_positive_amount()
+        {
+            var portfolio = new Portfolio(new Asset[0]);
+
+            portfolio.AddAsset(new Asset("MSFT", 20));
+            portfolio.AddAsset(new Asset("AAPL", 10));
+            portfolio.AddAsset(new Asset("MSFT", -10));
+
+            var expectedAssets = new[] {new Asset("MSFT", 10), new Asset("AAPL", 10)};
+            // ReSharper disable PossibleNullReferenceException
+            portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
+            // ReSharper restore PossibleNullReferenceException
+        }
+
         private static bool AssetEqualityComparison([NotNull] Asset asset1, [NotNull] Asset asset2)
         {
             return asset1.Symbol == asset2.Symbol &&
