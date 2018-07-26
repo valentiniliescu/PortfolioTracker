@@ -1,9 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PortfolioTracker.Helpers;
 using PortfolioTracker.PAS;
 using PortfolioTracker.View;
 using PortfolioTracker.ViewModel;
@@ -65,6 +68,24 @@ namespace PortfolioTrackerTests
             CheckViewModelBinding(window.ErrorTextBlock, TextBlock.TextProperty, nameof(MainViewModel.ErrorMessage));
         }
 
+        [TestMethod]
+        public void Event_bindings_should_be_set()
+        {
+            var viewModel = new MainViewModel(new PortfolioStore());
+
+            EventBindingExtension.EventBindingStore = new ConcurrentBag<Tuple<string, string, string>>();
+
+            // ReSharper disable ObjectCreationAsStatement
+            new MainWindow(viewModel);
+            // ReSharper restore ObjectCreationAsStatement
+
+            EventBindingExtension.EventBindingStore.Should().BeEquivalentTo(
+                new Tuple<string, string, string>(nameof(MainWindow.MainWindowWindow), nameof(Window.Loaded), nameof(MainViewModel.Load)),
+                new Tuple<string, string, string>(nameof(MainWindow.AddAssetButton), nameof(Button.Click), nameof(MainViewModel.AddAsset)),
+                new Tuple<string, string, string>(nameof(MainWindow.MainWindowWindow), nameof(Window.Closing), nameof(MainViewModel.Save))
+            );
+        }
+
         private static void CheckViewModelBinding(DependencyObject targetElement, DependencyProperty dependencyProperty, string propertyName)
         {
             Binding binding = BindingOperations.GetBinding(targetElement, dependencyProperty);
@@ -72,7 +93,5 @@ namespace PortfolioTrackerTests
             binding.Should().NotBeNull();
             binding.Path.Path.Should().Be(propertyName);
         }
-
-        // TODO: test that events are binded to ViewModel methods
     }
 }

@@ -2,11 +2,9 @@
 <Window x:Class="PortfolioTracker.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:helpers="clr-namespace:PortfolioTracker.Helpers"
-        mc:Ignorable="d"
         Title="Portfolio Tracker" Height="450" Width="800"
+        Name="MainWindowWindow" x:FieldModifier="public"
         Loaded="{helpers:EventBinding Load}"
         Closing="{helpers:EventBinding Save}">
     <Window.Resources>
@@ -23,7 +21,7 @@
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <TextBox Name="NewAssetSymbolTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetSymbol}" />
             <TextBox Name="NewAssetAmountTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetAmount}" />
-            <Button Click="{helpers:EventBinding AddAsset}">Add asset</Button>
+            <Button Name="AddAssetButton" x:FieldModifier="public" Click="{helpers:EventBinding AddAsset}">Add asset</Button>
         </StackPanel>
         <TextBlock Name="ErrorTextBlock" x:FieldModifier="public"
                    Text="{Binding Path=ErrorMessage, NotifyOnTargetUpdated=True}" Foreground="Red"

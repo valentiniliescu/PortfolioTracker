@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
@@ -10,6 +11,11 @@ namespace PortfolioTracker.Helpers
     // inspired by https://www.thomaslevesque.com/2011/09/23/wpf-4-5-subscribing-to-an-event-using-a-markup-extension/
     public sealed class EventBindingExtension : MarkupExtension
     {
+// could not find a better way to retrieve the event bindings in unit tests
+#if DEBUG
+        [CanBeNull] public static ConcurrentBag<Tuple<string, string, string>> EventBindingStore;
+#endif
+
         public EventBindingExtension([NotNull] string methodName)
         {
             MethodName = methodName;
@@ -52,6 +58,15 @@ namespace PortfolioTracker.Helpers
             {
                 throw new ArgumentException("No valid instance parameterless method with the specified name that returns void was found for method binding.", nameof(MethodName));
             }
+
+#if DEBUG
+            // ReSharper disable AssignNullToNotNullAttribute
+            EventBindingStore?.Add(new Tuple<string, string, string>(
+                (targetDependencyObject.GetValue(FrameworkElement.NameProperty) ?? targetDependencyObject.GetValue(FrameworkContentElement.NameProperty))?.ToString(),
+                eventInfo.Name,
+                MethodName));
+            // ReSharper restore AssignNullToNotNullAttribute
+#endif
 
             return handler;
         }
