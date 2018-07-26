@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
@@ -20,6 +21,21 @@ namespace PortfolioTrackerTests
             var expectedAssets = new[] {new Asset("MSFT", 30), new Asset("AAPL", 10)};
             // ReSharper disable PossibleNullReferenceException
             portfolio.Assets.Should().Equal(expectedAssets, AssetEqualityComparison);
+            // ReSharper restore PossibleNullReferenceException
+        }
+
+        [TestMethod]
+        public void Merged_assets_are_not_allowed_to_have_negative_amount()
+        {
+            var portfolio = new Portfolio(new Asset[0]);
+
+            portfolio.AddAsset(new Asset("MSFT", 10));
+            portfolio.AddAsset(new Asset("AAPL", 10));
+
+            Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
+
+            // ReSharper disable PossibleNullReferenceException
+            action.Should().Throw<ArgumentException>();
             // ReSharper restore PossibleNullReferenceException
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -24,6 +25,11 @@ namespace PortfolioTracker.Model
             if (_assets.TryGetValue(newAsset.Symbol, out Asset existingAsset))
             {
                 decimal amount = newAsset.Amount + existingAsset.Amount;
+                if (amount < 0)
+                {
+                    throw new ArgumentException(nameof(newAsset));
+                }
+                
                 _assets[newAsset.Symbol] = new Asset(newAsset.Symbol, amount);
             }
             else
