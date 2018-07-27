@@ -44,10 +44,7 @@ namespace PortfolioTracker.ViewModel
 
         public void Save()
         {
-            if (_portfolio != null)
-            {
-                _portfolioStore.Save(_portfolio);
-            }
+            _portfolioStore.Save(_portfolio);
         }
 
         [NotifyPropertyChangedInvocator]

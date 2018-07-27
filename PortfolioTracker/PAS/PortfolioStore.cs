@@ -10,9 +10,9 @@ namespace PortfolioTracker.PAS
         [NotNull]
         public Portfolio Load() => _portfolio ?? (_portfolio = new Portfolio());
 
-        public void Save([NotNull] Portfolio portfolio)
+        public void Save([CanBeNull] Portfolio portfolio)
         {
-            _portfolio = portfolio.Clone();
+            _portfolio = portfolio?.Clone();
         }
     }
 }
