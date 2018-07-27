@@ -11,9 +11,9 @@ namespace PortfolioTracker.Helpers
     // inspired by https://www.thomaslevesque.com/2011/09/23/wpf-4-5-subscribing-to-an-event-using-a-markup-extension/
     public sealed class EventBindingExtension : MarkupExtension
     {
-// could not find a better way to retrieve the event bindings in unit tests
+        // TODO: find a better way to test the event bindings
 #if DEBUG
-        [CanBeNull] public static ConcurrentBag<Tuple<string, string, string>> EventBindingStore;
+        [CanBeNull] public static ConcurrentBag<Tuple<DependencyObject, string, object, string>> EventBindingStore;
 #endif
 
         public EventBindingExtension([NotNull] string methodName)
@@ -61,10 +61,7 @@ namespace PortfolioTracker.Helpers
 
 #if DEBUG
             // ReSharper disable AssignNullToNotNullAttribute
-            EventBindingStore?.Add(new Tuple<string, string, string>(
-                (targetDependencyObject.GetValue(FrameworkElement.NameProperty) ?? targetDependencyObject.GetValue(FrameworkContentElement.NameProperty))?.ToString(),
-                eventInfo.Name,
-                MethodName));
+            EventBindingStore?.Add(new Tuple<DependencyObject, string, object, string>(targetDependencyObject, eventInfo.Name, dataContext, MethodName));
             // ReSharper restore AssignNullToNotNullAttribute
 #endif
 

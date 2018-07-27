@@ -19,23 +19,13 @@ namespace PortfolioTrackerTests
     public class MainWindowTests
     {
         [TestMethod]
-        public void Data_context_should_be_the_view_model()
-        {
-            var viewModel = new MainViewModel(new PortfolioStore());
-
-            var window = new MainWindow(viewModel);
-
-            window.DataContext.Should().Be(viewModel);
-        }
-
-        [TestMethod]
         public void Main_text_block_should_be_bound_to_portfolio_description_of_view_model()
         {
             var viewModel = new MainViewModel(new PortfolioStore());
 
             var window = new MainWindow(viewModel);
 
-            CheckViewModelBinding(window.MainTextBlock, TextBlock.TextProperty, nameof(MainViewModel.PortfolioDescription));
+            CheckBinding(window.MainTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.PortfolioDescription));
         }
 
         [TestMethod]
@@ -45,7 +35,7 @@ namespace PortfolioTrackerTests
 
             var window = new MainWindow(viewModel);
 
-            CheckViewModelBinding(window.NewAssetSymbolTextBox, TextBox.TextProperty, nameof(MainViewModel.NewAssetSymbol));
+            CheckBinding(window.NewAssetSymbolTextBox, TextBox.TextProperty, viewModel, nameof(MainViewModel.NewAssetSymbol));
         }
 
         [TestMethod]
@@ -55,7 +45,7 @@ namespace PortfolioTrackerTests
 
             var window = new MainWindow(viewModel);
 
-            CheckViewModelBinding(window.NewAssetAmountTextBox, TextBox.TextProperty, nameof(MainViewModel.NewAssetAmount));
+            CheckBinding(window.NewAssetAmountTextBox, TextBox.TextProperty, viewModel, nameof(MainViewModel.NewAssetAmount));
         }
 
         [TestMethod]
@@ -65,33 +55,42 @@ namespace PortfolioTrackerTests
 
             var window = new MainWindow(viewModel);
 
-            CheckViewModelBinding(window.ErrorTextBlock, TextBlock.TextProperty, nameof(MainViewModel.ErrorMessage));
+            CheckBinding(window.ErrorTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.ErrorMessage));
         }
 
+        // TODO: find a better way to test the event bindings
+#if DEBUG
         [TestMethod]
         public void Event_bindings_should_be_set()
         {
             var viewModel = new MainViewModel(new PortfolioStore());
 
-            EventBindingExtension.EventBindingStore = new ConcurrentBag<Tuple<string, string, string>>();
+            try
+            {
+                EventBindingExtension.EventBindingStore = new ConcurrentBag<Tuple<DependencyObject, string, object, string>>();
 
-            // ReSharper disable ObjectCreationAsStatement
-            new MainWindow(viewModel);
-            // ReSharper restore ObjectCreationAsStatement
+                var mainWindow = new MainWindow(viewModel);
 
-            EventBindingExtension.EventBindingStore.Should().BeEquivalentTo(
-                new Tuple<string, string, string>(nameof(MainWindow.MainWindowWindow), nameof(Window.Loaded), nameof(MainViewModel.Load)),
-                new Tuple<string, string, string>(nameof(MainWindow.AddAssetButton), nameof(Button.Click), nameof(MainViewModel.AddAsset)),
-                new Tuple<string, string, string>(nameof(MainWindow.MainWindowWindow), nameof(Window.Closing), nameof(MainViewModel.Save))
-            );
+                EventBindingExtension.EventBindingStore.Should().BeEquivalentTo(
+                    new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(MainWindow.Loaded), viewModel, nameof(MainViewModel.Load)),
+                    new Tuple<DependencyObject, string, object, string>(mainWindow.AddAssetButton, nameof(Button.Click), viewModel, nameof(MainViewModel.AddAsset)),
+                    new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(Window.Closing), viewModel, nameof(MainViewModel.Save))
+                );
+            }
+            finally
+            {
+                EventBindingExtension.EventBindingStore = null;
+            }
         }
+#endif
 
-        private static void CheckViewModelBinding(DependencyObject targetElement, DependencyProperty dependencyProperty, string propertyName)
+        private static void CheckBinding(DependencyObject targetElement, DependencyProperty targetDependencyProperty, object source, string sourcePropertyName)
         {
-            Binding binding = BindingOperations.GetBinding(targetElement, dependencyProperty);
+            BindingExpression bindingExpression = BindingOperations.GetBindingExpression(targetElement, targetDependencyProperty);
 
-            binding.Should().NotBeNull();
-            binding.Path.Path.Should().Be(propertyName);
+            bindingExpression.Should().NotBeNull();
+            bindingExpression.ResolvedSource.Should().Be(source);
+            bindingExpression.ParentBinding.Path.Path.Should().Be(sourcePropertyName);
         }
     }
 }

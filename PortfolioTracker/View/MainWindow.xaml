@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:PortfolioTracker.Helpers"
         Title="Portfolio Tracker" Height="450" Width="800"
-        Name="MainWindowWindow" x:FieldModifier="public"
         Loaded="{helpers:EventBinding Load}"
         Closing="{helpers:EventBinding Save}">
     <Window.Resources>
