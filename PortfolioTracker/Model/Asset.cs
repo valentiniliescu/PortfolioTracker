@@ -16,9 +16,6 @@ namespace PortfolioTracker.Model
         public decimal Amount { get; }
 
         [Pure]
-        public override string ToString()
-        {
-            return $"{Amount} {Symbol}";
-        }
+        public override string ToString() => $"{Amount} {Symbol}";
     }
 }

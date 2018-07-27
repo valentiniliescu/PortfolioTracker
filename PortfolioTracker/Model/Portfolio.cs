@@ -25,10 +25,7 @@ namespace PortfolioTracker.Model
 
         [Pure]
         [NotNull]
-        public Portfolio Clone()
-        {
-            return new Portfolio(new Dictionary<string, Asset>(_assets));
-        }
+        public Portfolio Clone() => new Portfolio(new Dictionary<string, Asset>(_assets));
 
         public void AddAsset([NotNull] Asset newAsset)
         {

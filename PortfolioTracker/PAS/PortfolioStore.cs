@@ -8,10 +8,7 @@ namespace PortfolioTracker.PAS
         [CanBeNull] private Portfolio _portfolio;
 
         [NotNull]
-        public Portfolio Load()
-        {
-            return _portfolio ?? (_portfolio = new Portfolio());
-        }
+        public Portfolio Load() => _portfolio ?? (_portfolio = new Portfolio());
 
         public void Save([NotNull] Portfolio portfolio)
         {
