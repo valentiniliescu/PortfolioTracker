@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
@@ -18,6 +19,7 @@ namespace PortfolioTracker.ViewModel
         }
 
         [CanBeNull]
+        [ExcludeFromCodeCoverage]
         public string PortfolioDescription => PortfolioFormatter.Format(_portfolio);
 
         [CanBeNull]

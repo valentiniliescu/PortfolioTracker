@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using FluentAssertions;
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.PAS;
 using PortfolioTracker.ViewModel;
+using PortfolioTrackerTests.Helpers;
 
 namespace PortfolioTrackerTests
 {
@@ -11,7 +13,16 @@ namespace PortfolioTrackerTests
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public class ViewModelTests
     {
-        // TODO: test to check if PortfolioDescription property is invoking PortfolioFormatter.Format method
+        [TestMethod]
+        public void Portfolio_description_should_call_formatter()
+        {
+            var viewModel = new MainViewModel(new PortfolioStore());
+
+            LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioDescription));
+
+            // TODO: better checking of the result
+            fromPropertyGetter.ToString().Should().Be("() => Format(value(PortfolioTracker.ViewModel.MainViewModel)._portfolio)");
+        }
 
         [TestMethod]
         public void Loading_assets_should_change_the_portfolio_description_and_fire_property_changed_event()
