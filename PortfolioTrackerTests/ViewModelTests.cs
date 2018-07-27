@@ -11,44 +11,7 @@ namespace PortfolioTrackerTests
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public class ViewModelTests
     {
-        [TestMethod]
-        public void Portfolio_description_when_it_has_a_single_asset()
-        {
-            var viewModel = new MainViewModel(new PortfolioStore());
-            viewModel.Load();
-
-            viewModel.NewAssetSymbol = "MSFT";
-            viewModel.NewAssetAmount = 100;
-            viewModel.AddAsset();
-
-            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
-        }
-
-        [TestMethod]
-        public void Portfolio_description_when_it_has_multiple_assets()
-        {
-            var viewModel = new MainViewModel(new PortfolioStore());
-            viewModel.Load();
-
-            viewModel.NewAssetSymbol = "MSFT";
-            viewModel.NewAssetAmount = 100;
-            viewModel.AddAsset();
-
-            viewModel.NewAssetSymbol = "AAPL";
-            viewModel.NewAssetAmount = 10;
-            viewModel.AddAsset();
-
-            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT, 10 AAPL shares");
-        }
-
-        [TestMethod]
-        public void Portfolio_description_when_it_has_no_assets()
-        {
-            var viewModel = new MainViewModel(new PortfolioStore());
-            viewModel.Load();
-
-            viewModel.PortfolioDescription.Should().Be("You have no assets");
-        }
+        // TODO: test to check if PortfolioDescription property is invoking PortfolioFormatter.Format method
 
         [TestMethod]
         public void Loading_assets_should_change_the_portfolio_description_and_fire_property_changed_event()
@@ -68,7 +31,7 @@ namespace PortfolioTrackerTests
         }
 
         [TestMethod]
-        public void Adding_an_asset_should_fire_property_changed_event()
+        public void Adding_an_asset_should_change_the_portfolio_description_and_fire_property_changed_event()
         {
             var viewModel = new MainViewModel(new PortfolioStore());
             viewModel.Load();
@@ -80,6 +43,7 @@ namespace PortfolioTrackerTests
                 viewModel.AddAsset();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
+                viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
             }
         }
 

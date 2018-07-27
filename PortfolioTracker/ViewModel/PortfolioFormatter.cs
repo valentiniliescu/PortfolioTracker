@@ -3,7 +3,7 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.ViewModel
 {
-    internal static class PortfolioFormatter
+    public static class PortfolioFormatter
     {
         [Pure]
         [CanBeNull]
