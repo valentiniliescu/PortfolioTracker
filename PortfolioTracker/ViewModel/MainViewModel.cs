@@ -18,24 +18,7 @@ namespace PortfolioTracker.ViewModel
         }
 
         [CanBeNull]
-        public string PortfolioDescription
-        {
-            get
-            {
-                if (_portfolio == null)
-                {
-                    return null;
-                }
-
-                if (_portfolio.HasAssets)
-
-                {
-                    return $"You have {string.Join(", ", _portfolio.Assets)} shares";
-                }
-
-                return "You have no assets";
-            }
-        }
+        public string PortfolioDescription => PortfolioFormatter.Format(_portfolio);
 
         [CanBeNull]
         public string ErrorMessage
