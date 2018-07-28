@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using FluentAssertions;
 using FluentAssertions.Events;
@@ -20,8 +21,9 @@ namespace PortfolioTrackerTests
 
             LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioDescription));
 
-            // TODO: better checking of the result
-            fromPropertyGetter.ToString().Should().Be("() => Format(value(PortfolioTracker.ViewModel.MainViewModel)._portfolio)");
+            CheckIsStaticMethodCall(fromPropertyGetter, typeof(PortfolioFormatter), nameof(PortfolioFormatter.Format));
+
+            // TODO: check the method call argument is Portfolio
         }
 
         [TestMethod]
@@ -98,6 +100,15 @@ namespace PortfolioTrackerTests
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
                 viewModelMonitored.Should().NotRaisePropertyChangeFor(vm => vm.PortfolioDescription);
             }
+        }
+
+        private static void CheckIsStaticMethodCall(LambdaExpression expression, Type methodDeclaringType, string methodName)
+        {
+            expression.Body.Should().BeAssignableTo<MethodCallExpression>();
+            var methodCallExpression = expression.Body as MethodCallExpression;
+            methodCallExpression.Object.Should().BeNull();
+            methodCallExpression.Method.DeclaringType.Should().Be(methodDeclaringType);
+            methodCallExpression.Method.Name.Should().Be(methodName);
         }
     }
 }
