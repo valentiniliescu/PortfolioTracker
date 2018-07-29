@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
 using PortfolioTracker.ViewModel;
 using PortfolioTrackerTests.Helpers;
@@ -21,17 +22,15 @@ namespace PortfolioTrackerTests
 
             LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioDescription));
 
-            CheckIsStaticMethodCall(fromPropertyGetter, typeof(PortfolioFormatter), nameof(PortfolioFormatter.Format));
-
-            // TODO: check the method call argument is Portfolio
+            CheckIsStaticMethodCallOnProperty(fromPropertyGetter, typeof(PortfolioFormatter), nameof(PortfolioFormatter.Format), viewModel.GetType(), nameof(viewModel.Portfolio));
         }
 
         [TestMethod]
-        public void Loading_assets_should_change_the_portfolio_description_and_fire_property_changed_event()
+        public void Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
         {
             var viewModel = new MainViewModel(new PortfolioStore());
 
-            viewModel.PortfolioDescription.Should().BeNull();
+            viewModel.Portfolio.Should().BeNull();
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
@@ -39,12 +38,12 @@ namespace PortfolioTrackerTests
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
 
-                viewModel.PortfolioDescription.Should().Be("You have no assets");
+                viewModel.Portfolio.Assets.Should().BeEmpty();
             }
         }
 
         [TestMethod]
-        public void Adding_an_asset_should_change_the_portfolio_description_and_fire_property_changed_event()
+        public void Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
         {
             var viewModel = new MainViewModel(new PortfolioStore());
             viewModel.Load();
@@ -56,15 +55,14 @@ namespace PortfolioTrackerTests
                 viewModel.AddAsset();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-                viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
+                viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 100));
             }
         }
 
         [TestMethod]
         public void Saving_should_save_the_assets_till_next_load()
         {
-            var portfolioStore = new PortfolioStore();
-            var viewModel = new MainViewModel(portfolioStore);
+            var viewModel = new MainViewModel(new PortfolioStore());
             viewModel.Load();
 
             viewModel.NewAssetSymbol = "MSFT";
@@ -79,14 +77,13 @@ namespace PortfolioTrackerTests
 
             viewModel.Load();
 
-            viewModel.PortfolioDescription.Should().Be("You have 100 MSFT shares");
+            viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 100));
         }
 
         [TestMethod]
         public void Adding_invalid_asset_should_set_error_message()
         {
-            var portfolioStore = new PortfolioStore();
-            var viewModel = new MainViewModel(portfolioStore);
+            var viewModel = new MainViewModel(new PortfolioStore());
             viewModel.Load();
 
             viewModel.ErrorMessage.Should().BeNull();
@@ -102,13 +99,19 @@ namespace PortfolioTrackerTests
             }
         }
 
-        private static void CheckIsStaticMethodCall(LambdaExpression expression, Type methodDeclaringType, string methodName)
+        private static void CheckIsStaticMethodCallOnProperty(LambdaExpression expression, Type methodDeclaringType, string methodName, Type propertyDeclaringType, string propertyName)
         {
             expression.Body.Should().BeAssignableTo<MethodCallExpression>();
             var methodCallExpression = expression.Body as MethodCallExpression;
             methodCallExpression.Object.Should().BeNull();
             methodCallExpression.Method.DeclaringType.Should().Be(methodDeclaringType);
             methodCallExpression.Method.Name.Should().Be(methodName);
+
+            methodCallExpression.Arguments.Should().HaveCount(1);
+            methodCallExpression.Arguments[0].Should().BeAssignableTo<MemberExpression>();
+            var memberExpression = methodCallExpression.Arguments[0] as MemberExpression;
+            memberExpression.Member.DeclaringType.Should().Be(propertyDeclaringType);
+            memberExpression.Member.Name.Should().Be(propertyName);
         }
     }
 }

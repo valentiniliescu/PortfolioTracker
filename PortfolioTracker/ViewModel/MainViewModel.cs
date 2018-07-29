@@ -11,7 +11,9 @@ namespace PortfolioTracker.ViewModel
     {
         [NotNull] private readonly PortfolioStore _portfolioStore;
         [CanBeNull] private string _errorMessage;
-        [CanBeNull] private Portfolio _portfolio;
+
+        [CanBeNull]
+        public Portfolio Portfolio { get; private set; }
 
         public MainViewModel([NotNull] PortfolioStore portfolioStore)
         {
@@ -20,7 +22,7 @@ namespace PortfolioTracker.ViewModel
 
         [CanBeNull]
         [ExcludeFromCodeCoverage]
-        public string PortfolioDescription => PortfolioFormatter.Format(_portfolio);
+        public string PortfolioDescription => PortfolioFormatter.Format(Portfolio);
 
         [CanBeNull]
         public string ErrorMessage
@@ -40,13 +42,13 @@ namespace PortfolioTracker.ViewModel
 
         public void Load()
         {
-            _portfolio = _portfolioStore.Load();
+            Portfolio = _portfolioStore.Load();
             OnPropertyChanged(nameof(PortfolioDescription));
         }
 
         public void Save()
         {
-            _portfolioStore.Save(_portfolio);
+            _portfolioStore.Save(Portfolio);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -57,11 +59,11 @@ namespace PortfolioTracker.ViewModel
 
         public void AddAsset()
         {
-            if (_portfolio != null && NewAssetSymbol != null)
+            if (Portfolio != null && NewAssetSymbol != null)
             {
                 try
                 {
-                    _portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+                    Portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
                 }
                 catch (Exception exception)
