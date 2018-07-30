@@ -18,7 +18,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Portfolio_description_should_call_formatter()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioDescription));
 
@@ -28,7 +28,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             viewModel.Portfolio.Should().BeNull();
 
@@ -45,7 +45,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
             viewModel.Load();
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
@@ -62,7 +62,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Saving_should_save_the_assets_till_next_load()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
             viewModel.Load();
 
             viewModel.NewAssetSymbol = "MSFT";
@@ -83,7 +83,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Adding_invalid_asset_should_set_error_message()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
             viewModel.Load();
 
             viewModel.ErrorMessage.Should().BeNull();

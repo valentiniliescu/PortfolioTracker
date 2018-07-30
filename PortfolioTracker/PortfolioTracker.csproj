@@ -49,7 +49,7 @@
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\Portfolio.cs" />
     <Compile Include="PAS\IPortfolioStore.cs" />
-    <Compile Include="PAS\PortfolioStore.cs" />
+    <Compile Include="PAS\InMemoryPortfolioStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PortfolioFormatter.cs" />

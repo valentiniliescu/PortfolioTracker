@@ -13,7 +13,7 @@ namespace PortfolioTracker
         [STAThread]
         private static void Main()
         {
-            var portfolioStore = new PortfolioStore();
+            var portfolioStore = new InMemoryPortfolioStore();
             var viewModel = new MainViewModel(portfolioStore);
 
             var mainWindow = new MainWindow(viewModel);

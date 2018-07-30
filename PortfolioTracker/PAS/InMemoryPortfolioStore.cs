@@ -3,7 +3,7 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
-    public sealed class PortfolioStore : IPortfolioStore
+    public sealed class InMemoryPortfolioStore : IPortfolioStore
     {
         [CanBeNull] private Portfolio _portfolio;
 

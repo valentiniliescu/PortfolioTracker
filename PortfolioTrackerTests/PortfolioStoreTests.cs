@@ -13,7 +13,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Loading_twice_should_return_different_portfolios()
         {
-            var portfolioStore = new PortfolioStore();
+            var portfolioStore = new InMemoryPortfolioStore();
 
             Portfolio loadedPortfolio1 = portfolioStore.Load();
             Portfolio loadedPortfolio2 = portfolioStore.Load();
@@ -24,7 +24,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Loading_after_saving_should_return_portfolio_with_the_same_assets()
         {
-            var portfolioStore = new PortfolioStore();
+            var portfolioStore = new InMemoryPortfolioStore();
             var savedPortfolio = new Portfolio();
             savedPortfolio.AddAsset(new Asset("MSFT", 100));
             portfolioStore.Save(savedPortfolio);
@@ -37,7 +37,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Loading_without_saving_should_return_portfolios_with_the_same_assets()
         {
-            var portfolioStore = new PortfolioStore();
+            var portfolioStore = new InMemoryPortfolioStore();
             var savedPortfolio = new Portfolio();
             savedPortfolio.AddAsset(new Asset("MSFT", 100));
             portfolioStore.Save(savedPortfolio);
@@ -51,7 +51,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Loading_with_saving_in_between_should_return_portfolios_with_different_assets()
         {
-            var portfolioStore = new PortfolioStore();
+            var portfolioStore = new InMemoryPortfolioStore();
             var savePortfolio = new Portfolio();
             savePortfolio.AddAsset(new Asset("MSFT", 100));
             portfolioStore.Save(savePortfolio);

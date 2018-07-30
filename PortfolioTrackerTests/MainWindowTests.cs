@@ -21,7 +21,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Main_text_block_should_be_bound_to_portfolio_description_of_view_model()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             var window = new MainWindow(viewModel);
 
@@ -31,7 +31,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void New_asset_symbol_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             var window = new MainWindow(viewModel);
 
@@ -41,7 +41,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void New_asset_amount_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             var window = new MainWindow(viewModel);
 
@@ -51,7 +51,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Error_text_block_should_be_bound_to_error_message_of_view_model()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             var window = new MainWindow(viewModel);
 
@@ -63,7 +63,7 @@ namespace PortfolioTrackerTests
         [TestMethod]
         public void Event_bindings_should_be_set()
         {
-            var viewModel = new MainViewModel(new PortfolioStore());
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
 
             try
             {
