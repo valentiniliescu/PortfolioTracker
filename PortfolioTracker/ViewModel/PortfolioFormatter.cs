@@ -7,6 +7,7 @@ namespace PortfolioTracker.ViewModel
     {
         [Pure]
         [CanBeNull]
+        [MustUseReturnValue]
         public static string Format([CanBeNull] Portfolio portfolio)
         {
             if (portfolio == null)

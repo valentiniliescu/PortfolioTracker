@@ -8,6 +8,7 @@ namespace PortfolioTracker.PAS
         [CanBeNull] private Portfolio _portfolio;
 
         [NotNull]
+        [MustUseReturnValue]
         public Portfolio Load()
         {
             if (_portfolio == null)
