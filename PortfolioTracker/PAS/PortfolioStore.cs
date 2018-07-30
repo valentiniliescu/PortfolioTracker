@@ -3,11 +3,10 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
-    public sealed class PortfolioStore
+    public sealed class PortfolioStore : IPortfolioStore
     {
         [CanBeNull] private Portfolio _portfolio;
 
-        [NotNull]
         [MustUseReturnValue]
         public Portfolio Load()
         {
@@ -19,7 +18,7 @@ namespace PortfolioTracker.PAS
             return _portfolio.Clone();
         }
 
-        public void Save([CanBeNull] Portfolio portfolio)
+        public void Save(Portfolio portfolio)
         {
             _portfolio = portfolio?.Clone();
         }

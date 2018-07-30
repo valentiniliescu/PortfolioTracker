@@ -9,13 +9,13 @@ namespace PortfolioTracker.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        [NotNull] private readonly PortfolioStore _portfolioStore;
+        [NotNull] private readonly IPortfolioStore _portfolioStore;
         [CanBeNull] private string _errorMessage;
 
         [CanBeNull]
         public Portfolio Portfolio { get; private set; }
 
-        public MainViewModel([NotNull] PortfolioStore portfolioStore)
+        public MainViewModel([NotNull] IPortfolioStore portfolioStore)
         {
             _portfolioStore = portfolioStore;
         }
