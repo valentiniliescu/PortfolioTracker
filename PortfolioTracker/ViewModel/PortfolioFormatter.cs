@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
@@ -18,7 +20,8 @@ namespace PortfolioTracker.ViewModel
             if (portfolio.HasAssets)
 
             {
-                return $"You have {string.Join(", ", portfolio.Assets)} shares";
+                IEnumerable<string> assetsText = portfolio.Assets.Select(AssetFormatter.Format);
+                return $"You have {string.Join(", ", assetsText)} shares";
             }
 
             return "You have no assets";

@@ -51,6 +51,7 @@
     <Compile Include="PAS\IPortfolioStore.cs" />
     <Compile Include="PAS\InMemoryPortfolioStore.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ViewModel\AssetFormatter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PortfolioFormatter.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
