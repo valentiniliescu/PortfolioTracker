@@ -36,6 +36,9 @@
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -49,8 +52,10 @@
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\Portfolio.cs" />
     <Compile Include="Model\Symbol.cs" />
+    <Compile Include="PAS\FilePortfolioStore.cs" />
     <Compile Include="PAS\IPortfolioStore.cs" />
     <Compile Include="PAS\InMemoryPortfolioStore.cs" />
+    <Compile Include="PAS\PortfolioJsonConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AssetFormatter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
