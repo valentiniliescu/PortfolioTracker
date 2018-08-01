@@ -74,6 +74,7 @@
     <Compile Include="PortfolioFormatterTests.cs" />
     <Compile Include="PortfolioStoreTests.cs" />
     <Compile Include="PortfolioTests.cs" />
+    <Compile Include="SymbolTests.cs" />
     <Compile Include="ViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>

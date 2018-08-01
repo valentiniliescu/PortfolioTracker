@@ -14,7 +14,7 @@ namespace PortfolioTrackerTests
         public void Portfolio_format_when_it_has_a_single_asset()
         {
             var portfolio = new Portfolio();
-            portfolio.AddAsset(new Asset("MSFT", 100));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
 
             PortfolioFormatter.Format(portfolio).Should().Be("You have 100 MSFT shares");
         }
@@ -23,8 +23,8 @@ namespace PortfolioTrackerTests
         public void Portfolio_format_when_it_has_multiple_assets()
         {
             var portfolio = new Portfolio();
-            portfolio.AddAsset(new Asset("MSFT", 100));
-            portfolio.AddAsset(new Asset("AAPL", 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
             PortfolioFormatter.Format(portfolio).Should().Be("You have 100 MSFT, 10 AAPL shares");
         }

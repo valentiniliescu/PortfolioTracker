@@ -8,6 +8,6 @@ namespace PortfolioTracker.ViewModel
         [Pure]
         [NotNull]
         [MustUseReturnValue]
-        public static string Format([NotNull] Asset asset) => $"{asset.Amount} {asset.Symbol}";
+        public static string Format([NotNull] Asset asset) => $"{asset.Amount} {asset.Symbol.Text}";
     }
 }

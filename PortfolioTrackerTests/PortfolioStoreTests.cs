@@ -26,7 +26,7 @@ namespace PortfolioTrackerTests
         {
             var portfolioStore = new InMemoryPortfolioStore();
             var savedPortfolio = new Portfolio();
-            savedPortfolio.AddAsset(new Asset("MSFT", 100));
+            savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio = portfolioStore.Load();
@@ -39,7 +39,7 @@ namespace PortfolioTrackerTests
         {
             var portfolioStore = new InMemoryPortfolioStore();
             var savedPortfolio = new Portfolio();
-            savedPortfolio.AddAsset(new Asset("MSFT", 100));
+            savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio1 = portfolioStore.Load();
@@ -53,12 +53,12 @@ namespace PortfolioTrackerTests
         {
             var portfolioStore = new InMemoryPortfolioStore();
             var savePortfolio = new Portfolio();
-            savePortfolio.AddAsset(new Asset("MSFT", 100));
+            savePortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             portfolioStore.Save(savePortfolio);
 
             Portfolio loadedPortfolio1 = portfolioStore.Load();
 
-            savePortfolio.AddAsset(new Asset("AAPL", 100));
+            savePortfolio.AddAsset(new Asset(new Symbol("AAPL"), 100));
             portfolioStore.Save(savePortfolio);
 
             Portfolio loadedPortfolio2 = portfolioStore.Load();

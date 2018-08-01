@@ -6,13 +6,13 @@ namespace PortfolioTracker.Model
 {
     public sealed class Portfolio
     {
-        [NotNull] private readonly Dictionary<string, Asset> _assets;
+        [NotNull] private readonly Dictionary<Symbol, Asset> _assets;
 
-        public Portfolio() : this(new Dictionary<string, Asset>())
+        public Portfolio() : this(new Dictionary<Symbol, Asset>())
         {
         }
 
-        private Portfolio([NotNull] Dictionary<string, Asset> assets)
+        private Portfolio([NotNull] Dictionary<Symbol, Asset> assets)
         {
             _assets = assets;
         }
@@ -25,7 +25,7 @@ namespace PortfolioTracker.Model
 
         [Pure]
         [NotNull]
-        public Portfolio Clone() => new Portfolio(new Dictionary<string, Asset>(_assets));
+        public Portfolio Clone() => new Portfolio(new Dictionary<Symbol, Asset>(_assets));
 
         public void AddAsset([NotNull] Asset newAsset)
         {

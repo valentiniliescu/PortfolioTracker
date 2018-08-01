@@ -48,6 +48,7 @@
     <Compile Include="Helpers\EventBindingExtension.cs" />
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\Portfolio.cs" />
+    <Compile Include="Model\Symbol.cs" />
     <Compile Include="PAS\IPortfolioStore.cs" />
     <Compile Include="PAS\InMemoryPortfolioStore.cs" />
     <Compile Include="Program.cs" />

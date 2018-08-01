@@ -12,13 +12,13 @@ namespace PortfolioTracker.ViewModel
         [NotNull] private readonly IPortfolioStore _portfolioStore;
         [CanBeNull] private string _errorMessage;
 
-        [CanBeNull]
-        public Portfolio Portfolio { get; private set; }
-
         public MainViewModel([NotNull] IPortfolioStore portfolioStore)
         {
             _portfolioStore = portfolioStore;
         }
+
+        [CanBeNull]
+        public Portfolio Portfolio { get; private set; }
 
         [CanBeNull]
         [ExcludeFromCodeCoverage]
@@ -63,7 +63,7 @@ namespace PortfolioTracker.ViewModel
             {
                 try
                 {
-                    Portfolio.AddAsset(new Asset(NewAssetSymbol, NewAssetAmount));
+                    Portfolio.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
                 }
                 catch (Exception exception)

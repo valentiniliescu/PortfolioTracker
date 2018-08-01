@@ -55,7 +55,7 @@ namespace PortfolioTrackerTests
                 viewModel.AddAsset();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-                viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 100));
+                viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
             }
         }
 
@@ -77,7 +77,7 @@ namespace PortfolioTrackerTests
 
             viewModel.Load();
 
-            viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 100));
+            viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
         }
 
         [TestMethod]

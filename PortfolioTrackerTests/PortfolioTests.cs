@@ -15,11 +15,11 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("MSFT", 10));
-            portfolio.AddAsset(new Asset("AAPL", 10));
-            portfolio.AddAsset(new Asset("MSFT", 20));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
 
-            portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 30), new Asset("AAPL", 10));
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 30), new Asset(new Symbol("AAPL"), 10));
         }
 
         [TestMethod]
@@ -27,10 +27,10 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("MSFT", 10));
-            portfolio.AddAsset(new Asset("AAPL", 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
-            Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
+            Action action = () => portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -40,9 +40,9 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("AAPL", 10));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
-            Action action = () => portfolio.AddAsset(new Asset("MSFT", -20));
+            Action action = () => portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -52,11 +52,11 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("MSFT", 20));
-            portfolio.AddAsset(new Asset("AAPL", 10));
-            portfolio.AddAsset(new Asset("MSFT", -10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), -10));
 
-            portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 10), new Asset("AAPL", 10));
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
         }
 
         [TestMethod]
@@ -64,11 +64,11 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("MSFT", 20));
-            portfolio.AddAsset(new Asset("AAPL", 10));
-            portfolio.AddAsset(new Asset("MSFT", -20));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
 
-            portfolio.Assets.Should().BeEquivalentTo(new Asset("AAPL", 10));
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("AAPL"), 10));
         }
 
         [TestMethod]
@@ -76,11 +76,11 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("MSFT", 20));
-            portfolio.AddAsset(new Asset("AAPL", 10));
-            portfolio.AddAsset(new Asset("MSFT", 0));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 0));
 
-            portfolio.Assets.Should().BeEquivalentTo(new Asset("MSFT", 20), new Asset("AAPL", 10));
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 20), new Asset(new Symbol("AAPL"), 10));
         }
 
         [TestMethod]
@@ -88,10 +88,10 @@ namespace PortfolioTrackerTests
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset("AAPL", 10));
-            portfolio.AddAsset(new Asset("MSFT", 0));
+            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 0));
 
-            portfolio.Assets.Should().BeEquivalentTo(new Asset("AAPL", 10));
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("AAPL"), 10));
         }
     }
 }
