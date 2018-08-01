@@ -69,15 +69,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilePortfolioStoreTests.cs" />
     <Compile Include="Helpers\LambdaExpressionConverter.cs" />
-    <Compile Include="InMemoryPortfolioStoreTests.cs" />
-    <Compile Include="MainWindowTests.cs" />
-    <Compile Include="PortfolioFormatterTests.cs" />
-    <Compile Include="PortfolioStoreTests.cs" />
-    <Compile Include="PortfolioTests.cs" />
-    <Compile Include="SymbolTests.cs" />
-    <Compile Include="ViewModelTests.cs" />
+    <Compile Include="Model\PortfolioTests.cs" />
+    <Compile Include="Model\SymbolTests.cs" />
+    <Compile Include="PAS\FilePortfolioStoreTests.cs" />
+    <Compile Include="PAS\InMemoryPortfolioStoreTests.cs" />
+    <Compile Include="PAS\PortfolioStoreTests.cs" />
+    <Compile Include="ViewModel\ViewModelTests.cs" />
+    <Compile Include="View\MainWindowTests.cs" />
+    <Compile Include="View\PortfolioFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

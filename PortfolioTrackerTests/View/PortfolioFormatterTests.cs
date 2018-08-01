@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
 using PortfolioTracker.ViewModel;
 
-namespace PortfolioTrackerTests
+namespace PortfolioTrackerTests.View
 {
     [TestClass]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

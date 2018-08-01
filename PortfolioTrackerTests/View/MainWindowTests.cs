@@ -11,7 +11,7 @@ using PortfolioTracker.PAS;
 using PortfolioTracker.View;
 using PortfolioTracker.ViewModel;
 
-namespace PortfolioTrackerTests
+namespace PortfolioTrackerTests.View
 {
     [TestClass]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

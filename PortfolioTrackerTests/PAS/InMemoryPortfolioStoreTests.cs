@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.PAS;
 
-namespace PortfolioTrackerTests
+namespace PortfolioTrackerTests.PAS
 {
     [TestClass]
     public class InMemoryPortfolioStoreTests : PortfolioStoreTests

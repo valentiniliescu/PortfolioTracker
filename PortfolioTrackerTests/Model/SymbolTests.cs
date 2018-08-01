@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
 
-namespace PortfolioTrackerTests
+namespace PortfolioTrackerTests.Model
 {
     [TestClass]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
