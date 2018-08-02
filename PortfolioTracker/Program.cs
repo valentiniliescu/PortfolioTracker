@@ -13,13 +13,11 @@ namespace PortfolioTracker
         [STAThread]
         private static void Main()
         {
-            var portfolioStore = new FilePortfolioStore();
-            var viewModel = new MainViewModel(portfolioStore);
+            var viewModel = new MainViewModel(new FilePortfolioStore());
 
             var mainWindow = new MainWindow(viewModel);
 
-            var application = new Application();
-            application.Run(mainWindow);
+            new Application().Run(mainWindow);
         }
     }
 }
