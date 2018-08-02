@@ -99,6 +99,8 @@ namespace PortfolioTrackerTests.ViewModel
             }
         }
 
+        // TODO: add unit tests for loading/saving errors
+
         private static void CheckIsStaticMethodCallOnProperty(LambdaExpression expression, Type methodDeclaringType, string methodName, Type propertyDeclaringType, string propertyName)
         {
             expression.Body.Should().BeAssignableTo<MethodCallExpression>();

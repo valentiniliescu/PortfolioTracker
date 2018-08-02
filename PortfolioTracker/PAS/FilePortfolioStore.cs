@@ -25,38 +25,52 @@ namespace PortfolioTracker.PAS
 
         public Portfolio Load()
         {
-            Portfolio portfolio;
-
-            if (File.Exists(_filePath))
+            try
             {
-                string json = File.ReadAllText(_filePath);
-                portfolio = JsonConvert.DeserializeObject<Portfolio>(json, new PortfolioJsonConverter());
-                if (portfolio == null)
+                Portfolio portfolio;
+
+                if (File.Exists(_filePath))
                 {
-                    throw new NullReferenceException();
+                    string json = File.ReadAllText(_filePath);
+                    portfolio = JsonConvert.DeserializeObject<Portfolio>(json, new PortfolioJsonConverter());
+                    if (portfolio == null)
+                    {
+                        throw new NullReferenceException();
+                    }
                 }
-            }
-            else
-            {
-                portfolio = new Portfolio();
-            }
+                else
+                {
+                    portfolio = new Portfolio();
+                }
 
-            return portfolio;
+                return portfolio;
+            }
+            catch (Exception exception)
+            {
+                throw new PortfolioStoreLoadException("Error loading portfolio", exception);
+            }
         }
 
         public void Save(Portfolio portfolio)
         {
-            if (portfolio != null)
+            try
             {
-                string json = JsonConvert.SerializeObject(portfolio, Formatting.Indented, new PortfolioJsonConverter());
-                File.WriteAllText(_filePath, json);
-            }
-            else
-            {
-                if (File.Exists(_filePath))
+                if (portfolio != null)
                 {
-                    File.Delete(_filePath);
+                    string json = JsonConvert.SerializeObject(portfolio, Formatting.Indented, new PortfolioJsonConverter());
+                    File.WriteAllText(_filePath, json);
                 }
+                else
+                {
+                    if (File.Exists(_filePath))
+                    {
+                        File.Delete(_filePath);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new PortfolioStoreSaveException("Error saving portfolio", exception);
             }
         }
     }

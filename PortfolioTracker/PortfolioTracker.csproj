@@ -56,6 +56,8 @@
     <Compile Include="PAS\IPortfolioStore.cs" />
     <Compile Include="PAS\InMemoryPortfolioStore.cs" />
     <Compile Include="PAS\PortfolioJsonConverter.cs" />
+    <Compile Include="PAS\PortfolioStoreLoadException.cs" />
+    <Compile Include="PAS\PortfolioStoreSaveException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AssetFormatter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

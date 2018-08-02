@@ -42,13 +42,27 @@ namespace PortfolioTracker.ViewModel
 
         public void Load()
         {
-            Portfolio = _portfolioStore.Load();
-            OnPropertyChanged(nameof(PortfolioDescription));
+            try
+            {
+                Portfolio = _portfolioStore.Load();
+                OnPropertyChanged(nameof(PortfolioDescription));
+            }
+            catch (PortfolioStoreLoadException exception)
+            {
+                ErrorMessage = exception.Message;
+            }
         }
 
         public void Save()
         {
-            _portfolioStore.Save(Portfolio);
+            try
+            {
+                _portfolioStore.Save(Portfolio);
+            }
+            catch (PortfolioStoreSaveException exception)
+            {
+                ErrorMessage = exception.Message;
+            }
         }
 
         [NotifyPropertyChangedInvocator]
