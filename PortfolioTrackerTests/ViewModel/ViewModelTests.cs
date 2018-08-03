@@ -95,11 +95,37 @@ namespace PortfolioTrackerTests.ViewModel
                 viewModel.AddAsset();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
-                viewModelMonitored.Should().NotRaisePropertyChangeFor(vm => vm.PortfolioDescription);
+                viewModel.ErrorMessage.Should().NotBeNull();
             }
         }
 
-        // TODO: add unit tests for loading/saving errors
+        [TestMethod]
+        public void Store_loading_error_should_set_error_message()
+        {
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore {ThrowOnLoad = true});
+
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.Load();
+
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
+                viewModel.ErrorMessage.Should().NotBeNull();
+            }
+        }
+
+        [TestMethod]
+        public void Store_saving_error_should_set_error_message()
+        {
+            var viewModel = new MainViewModel(new InMemoryPortfolioStore {ThrowOnSave = true});
+
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.Save();
+
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
+                viewModel.ErrorMessage.Should().NotBeNull();
+            }
+        }
 
         private static void CheckIsStaticMethodCallOnProperty(LambdaExpression expression, Type methodDeclaringType, string methodName, Type propertyDeclaringType, string propertyName)
         {
