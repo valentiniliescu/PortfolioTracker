@@ -26,11 +26,11 @@ namespace PortfolioTrackerTests.PAS
         }
 
         [TestMethod]
-        [Ignore]
+        [DeploymentItem("Files/Invalid.txt")]
         public void Loading_error_should_throw_PortfolioStoreLoadException()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            IPortfolioStore portfolioStore = new FilePortfolioStore(null);
+            IPortfolioStore portfolioStore = new FilePortfolioStore("Invalid.txt");
 
             // ReSharper disable once MustUseReturnValue
             Action action = () => portfolioStore.Load();
