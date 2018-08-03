@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
@@ -10,6 +11,8 @@ namespace PortfolioTrackerTests.PAS
     public abstract class PortfolioStoreTests
     {
         protected abstract IPortfolioStore CreatePortfolioStore();
+        protected abstract IPortfolioStore CreatePortfolioStoreWithSaveError();
+        protected abstract IPortfolioStore CreatePortfolioStoreWithLoadError();
 
         [TestMethod]
         public void Loading_twice_should_return_different_portfolios()
@@ -73,6 +76,27 @@ namespace PortfolioTrackerTests.PAS
             loadedPortfolio1.Assets.Should().NotBeEquivalentTo(loadedPortfolio2.Assets);
 
             portfolioStore.Save(null);
+        }
+
+        [TestMethod]
+        public void Saving_error_should_throw_PortfolioStoreSaveException()
+        {
+            IPortfolioStore portfolioStore = CreatePortfolioStoreWithSaveError();
+
+            Action action = () => portfolioStore.Save(new Portfolio());
+
+            action.Should().Throw<PortfolioStoreSaveException>();
+        }
+
+        [TestMethod]
+        public void Loading_error_should_throw_PortfolioStoreLoadException()
+        {
+            IPortfolioStore portfolioStore = CreatePortfolioStoreWithLoadError();
+
+            // ReSharper disable once MustUseReturnValue
+            Action action = () => portfolioStore.Load();
+
+            action.Should().Throw<PortfolioStoreLoadException>();
         }
     }
 }

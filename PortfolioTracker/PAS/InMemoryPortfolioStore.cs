@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
@@ -7,8 +8,17 @@ namespace PortfolioTracker.PAS
     {
         [CanBeNull] private Portfolio _portfolio;
 
+        public bool ThrowOnLoad { private get; set; }
+
+        public bool ThrowOnSave { private get; set; }
+
         public Portfolio Load()
         {
+            if (ThrowOnLoad)
+            {
+                throw new PortfolioStoreLoadException("Error loading the store", new Exception());
+            }
+
             if (_portfolio == null)
             {
                 _portfolio = new Portfolio();
@@ -19,6 +29,11 @@ namespace PortfolioTracker.PAS
 
         public void Save(Portfolio portfolio)
         {
+            if (ThrowOnSave)
+            {
+                throw new PortfolioStoreSaveException("Error saving the store", new Exception());
+            }
+
             _portfolio = portfolio?.Clone();
         }
     }
