@@ -43,6 +43,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -51,6 +52,7 @@
     <Compile Include="Helpers\EventBindingExtension.cs" />
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\Portfolio.cs" />
+    <Compile Include="Model\Quote.cs" />
     <Compile Include="Model\Symbol.cs" />
     <Compile Include="PAS\FilePortfolioStore.cs" />
     <Compile Include="PAS\IPortfolioStore.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="PAS\PortfolioJsonConverter.cs" />
     <Compile Include="PAS\PortfolioStoreLoadException.cs" />
     <Compile Include="PAS\PortfolioStoreSaveException.cs" />
+    <Compile Include="PAS\QuoteLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AssetFormatter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
