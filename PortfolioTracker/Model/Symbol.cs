@@ -2,7 +2,7 @@
 
 namespace PortfolioTracker.Model
 {
-    public class Symbol
+    public sealed class Symbol
     {
         public Symbol([NotNull] string text)
         {

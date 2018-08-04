@@ -6,7 +6,7 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
-    public class PortfolioJsonConverter : JsonConverter<Portfolio>
+    public sealed class PortfolioJsonConverter : JsonConverter<Portfolio>
     {
         public override void WriteJson(JsonWriter writer, Portfolio portfolio, [NotNull] JsonSerializer serializer)
         {
