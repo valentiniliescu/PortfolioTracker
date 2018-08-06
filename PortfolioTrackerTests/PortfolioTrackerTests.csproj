@@ -77,9 +77,9 @@
     <Compile Include="PAS\InMemoryPortfolioStoreTests.cs" />
     <Compile Include="PAS\PortfolioStoreTests.cs" />
     <Compile Include="PAS\QuoteLoaderTests.cs" />
+    <Compile Include="ViewModel\PortfolioFormatterTests.cs" />
     <Compile Include="ViewModel\ViewModelTests.cs" />
     <Compile Include="View\MainWindowTests.cs" />
-    <Compile Include="View\PortfolioFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
