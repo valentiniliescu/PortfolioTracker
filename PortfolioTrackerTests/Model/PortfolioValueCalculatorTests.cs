@@ -64,5 +64,21 @@ namespace PortfolioTrackerTests.Model
 
             PortfolioValueCalculator.Calculate(portfolio, quotes).Should().Be(0);
         }
+
+        [TestMethod]
+        public void Calculate_should_return_zero_if_portfolio_is_null()
+        {
+            var quotes = new Quote[0];
+
+            PortfolioValueCalculator.Calculate(null, quotes).Should().Be(0);
+        }
+
+        [TestMethod]
+        public void Calculate_should_return_zero_if_quotes_is_null()
+        {
+            var portfolio = new Portfolio();
+
+            PortfolioValueCalculator.Calculate(portfolio, null).Should().Be(0);
+        }
     }
 }
