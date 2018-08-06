@@ -78,6 +78,7 @@
     <Compile Include="PAS\PortfolioStoreTests.cs" />
     <Compile Include="PAS\QuoteLoaderTests.cs" />
     <Compile Include="ViewModel\PortfolioFormatterTests.cs" />
+    <Compile Include="ViewModel\PortfolioValueFormatterTests.cs" />
     <Compile Include="ViewModel\ViewModelTests.cs" />
     <Compile Include="View\MainWindowTests.cs" />
   </ItemGroup>
