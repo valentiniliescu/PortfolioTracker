@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,12 +15,13 @@ namespace PortfolioTrackerTests.ViewModel
 {
     [TestClass]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class ViewModelTests
     {
         [TestMethod]
         public void Portfolio_description_should_call_formatter()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioDescription));
 
@@ -28,7 +31,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             viewModel.Portfolio.Should().BeNull();
 
@@ -45,7 +48,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
             viewModel.Load();
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
@@ -62,7 +65,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Saving_should_save_the_assets_till_next_load()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
             viewModel.Load();
 
             viewModel.NewAssetSymbol = "MSFT";
@@ -83,7 +86,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Adding_invalid_asset_should_set_error_message()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
             viewModel.Load();
 
             viewModel.ErrorMessage.Should().BeNull();
@@ -102,7 +105,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Store_loading_error_should_set_error_message()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore {ThrowOnLoad = true});
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore {ThrowOnLoad = true}, symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
@@ -116,7 +119,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public void Store_saving_error_should_set_error_message()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore {ThrowOnSave = true});
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore {ThrowOnSave = true}, symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {

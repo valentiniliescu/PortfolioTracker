@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="Helpers\LambdaExpressionConverter.cs" />
     <Compile Include="Model\PortfolioTests.cs" />
-    <Compile Include="Model\PortfolioValueCalculatorTests.cs" />
     <Compile Include="Model\SymbolTests.cs" />
     <Compile Include="PAS\FilePortfolioStoreTests.cs" />
     <Compile Include="PAS\InMemoryPortfolioStoreTests.cs" />

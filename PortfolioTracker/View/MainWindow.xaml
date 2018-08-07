@@ -11,6 +11,10 @@
             <Setter Property="MinWidth" Value="100" />
             <Setter Property="Margin" Value="2" />
         </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
         <Style TargetType="Button">
             <Setter Property="MinWidth" Value="100" />
             <Setter Property="Margin" Value="2" />
@@ -21,6 +25,10 @@
             <TextBox Name="NewAssetSymbolTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetSymbol}" />
             <TextBox Name="NewAssetAmountTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetAmount}" />
             <Button Name="AddAssetButton" x:FieldModifier="public" Click="{helpers:EventBinding AddAsset}">Add asset</Button>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <TextBlock Name="ValueTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioValueDescription}" />
+            <Button Name="CalculateButton" x:FieldModifier="public" Click="{helpers:EventBinding Calculate}">Calculate</Button>
         </StackPanel>
         <TextBlock Name="ErrorTextBlock" x:FieldModifier="public"
                    Text="{Binding Path=ErrorMessage, NotifyOnTargetUpdated=True}" Foreground="Red"
@@ -42,6 +50,7 @@
             </TextBlock.Triggers>
         </TextBlock>
         <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
+
     </DockPanel>
 </Window>
 <!-- ReSharper restore Xaml.BindingWithoutContextNotResolved -->

@@ -9,20 +9,26 @@ namespace PortfolioTracker.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        [NotNull] private readonly IPortfolioStore _portfolioStore;
+        [NotNull] private readonly PortfolioWithValue _portfolioWithValue;
         [CanBeNull] private string _errorMessage;
 
-        public MainViewModel([NotNull] IPortfolioStore portfolioStore)
+        public MainViewModel([NotNull] PortfolioWithValue portfolioWithValue)
         {
-            _portfolioStore = portfolioStore;
+            _portfolioWithValue = portfolioWithValue;
         }
 
         [CanBeNull]
-        public Portfolio Portfolio { get; private set; }
+        public Portfolio Portfolio => _portfolioWithValue.Portfolio;
+
+        public decimal TotalValue => _portfolioWithValue.TotalValue;
 
         [CanBeNull]
         [ExcludeFromCodeCoverage]
         public string PortfolioDescription => PortfolioFormatter.Format(Portfolio);
+
+        [CanBeNull]
+        [ExcludeFromCodeCoverage]
+        public string PortfolioValueDescription => PortfolioValueFormatter.Format(TotalValue);
 
         [CanBeNull]
         public string ErrorMessage
@@ -44,7 +50,7 @@ namespace PortfolioTracker.ViewModel
         {
             try
             {
-                Portfolio = _portfolioStore.Load();
+                _portfolioWithValue.Load();
                 OnPropertyChanged(nameof(PortfolioDescription));
             }
             catch (PortfolioStoreLoadException exception)
@@ -57,9 +63,22 @@ namespace PortfolioTracker.ViewModel
         {
             try
             {
-                _portfolioStore.Save(Portfolio);
+                _portfolioWithValue.Save();
             }
             catch (PortfolioStoreSaveException exception)
+            {
+                ErrorMessage = exception.Message;
+            }
+        }
+
+        public async void Calculate()
+        {
+            try
+            {
+                await _portfolioWithValue.Calculate();
+                OnPropertyChanged(nameof(PortfolioValueDescription));
+            }
+            catch (Exception exception)
             {
                 ErrorMessage = exception.Message;
             }
@@ -77,8 +96,9 @@ namespace PortfolioTracker.ViewModel
             {
                 try
                 {
-                    Portfolio.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
+                    _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
+                    OnPropertyChanged(nameof(PortfolioValueDescription));
                 }
                 catch (Exception exception)
                 {

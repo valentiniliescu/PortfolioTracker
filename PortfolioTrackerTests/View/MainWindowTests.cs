@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Helpers;
+using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
 using PortfolioTracker.View;
 using PortfolioTracker.ViewModel;
@@ -21,7 +24,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Main_text_block_should_be_bound_to_portfolio_description_of_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             var window = new MainWindow(viewModel);
 
@@ -31,7 +34,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void New_asset_symbol_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             var window = new MainWindow(viewModel);
 
@@ -41,7 +44,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void New_asset_amount_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             var window = new MainWindow(viewModel);
 
@@ -51,7 +54,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Error_text_block_should_be_bound_to_error_message_of_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             var window = new MainWindow(viewModel);
 
@@ -63,7 +66,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Event_bindings_should_be_set()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
 
             try
             {
@@ -74,6 +77,7 @@ namespace PortfolioTrackerTests.View
                 EventBindingExtension.EventBindingStore.Should().BeEquivalentTo(
                     new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(MainWindow.Loaded), viewModel, nameof(MainViewModel.Load)),
                     new Tuple<DependencyObject, string, object, string>(mainWindow.AddAssetButton, nameof(Button.Click), viewModel, nameof(MainViewModel.AddAsset)),
+                    new Tuple<DependencyObject, string, object, string>(mainWindow.CalculateButton, nameof(Button.Click), viewModel, nameof(MainViewModel.Calculate)),
                     new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(Window.Closing), viewModel, nameof(MainViewModel.Save))
                 );
             }

@@ -50,10 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\EventBindingExtension.cs" />
-    <Compile Include="Helpers\NotifyTaskCompletion.cs" />
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\Portfolio.cs" />
-    <Compile Include="Model\PortfolioValueCalculator.cs" />
+    <Compile Include="Model\PortfolioWithValue.cs" />
     <Compile Include="Model\Quote.cs" />
     <Compile Include="Model\Symbol.cs" />
     <Compile Include="PAS\FilePortfolioStore.cs" />
