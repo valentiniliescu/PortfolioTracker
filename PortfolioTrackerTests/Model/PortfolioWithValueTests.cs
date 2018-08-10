@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -18,9 +16,7 @@ namespace PortfolioTrackerTests.Model
         [TestMethod]
         public void Portfolio_should_be_null_initially()
         {
-            var portfolioStore = new InMemoryPortfolioStore();
-            Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)));
-            var portfolioWithValue = new PortfolioWithValue(portfolioStore, quoteLoader);
+            var portfolioWithValue = new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))));
 
             portfolioWithValue.Portfolio.Should().BeNull();
         }
@@ -28,9 +24,7 @@ namespace PortfolioTrackerTests.Model
         [TestMethod]
         public void Portfolio_should_be_empty_after_loading()
         {
-            var portfolioStore = new InMemoryPortfolioStore();
-            Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)));
-            var portfolioWithValue = new PortfolioWithValue(portfolioStore, quoteLoader);
+            var portfolioWithValue = new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))));
 
             portfolioWithValue.Load();
 
@@ -40,9 +34,7 @@ namespace PortfolioTrackerTests.Model
         [TestMethod]
         public void Portfolio_should_have_assets_after_adding_assets()
         {
-            var portfolioStore = new InMemoryPortfolioStore();
-            Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)));
-            var portfolioWithValue = new PortfolioWithValue(portfolioStore, quoteLoader);
+            var portfolioWithValue = new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))));
 
             portfolioWithValue.Load();
             portfolioWithValue.AddAsset(new Asset(new Symbol("MSFT"), 10));
@@ -54,14 +46,14 @@ namespace PortfolioTrackerTests.Model
         [TestMethod]
         public void Calculate_should_set_total_value()
         {
-            var portfolioStore = new InMemoryPortfolioStore();
-            Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
-            var portfolioWithValue = new PortfolioWithValue(portfolioStore, quoteLoader);
+            var portfolioWithValue = new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100))));
 
             portfolioWithValue.Load();
             portfolioWithValue.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolioWithValue.AddAsset(new Asset(new Symbol("AAPL"), 10));
+#pragma warning disable 4014
             portfolioWithValue.Calculate();
+#pragma warning restore 4014
 
             portfolioWithValue.TotalValue.Should().Be(2000);
         }

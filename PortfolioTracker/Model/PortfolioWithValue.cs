@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -10,9 +9,9 @@ namespace PortfolioTracker.Model
     public sealed class PortfolioWithValue
     {
         [NotNull] private readonly IPortfolioStore _portfolioStore;
-        [NotNull] private readonly Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> _quoteLoader;
+        [NotNull] private readonly QuoteLoaderDelegate _quoteLoader;
 
-        public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore, [NotNull] Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader)
+        public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore, [NotNull] QuoteLoaderDelegate quoteLoader)
         {
             _portfolioStore = portfolioStore;
             _quoteLoader = quoteLoader;
@@ -44,17 +43,17 @@ namespace PortfolioTracker.Model
             {
                 IEnumerable<Symbol> symbols = Portfolio.Assets.Select(asset => asset.Symbol);
 
+                // ReSharper disable once PossibleNullReferenceException
                 IEnumerable<Quote> quotes = await _quoteLoader(symbols);
 
                 TotalValue = Portfolio.Assets
-                        .Join(quotes, asset => asset.Symbol, quote => quote.Symbol, (asset, quote) => quote != null ? asset.Amount * quote.Price : 0)
-                        .Sum();
+                    .Join(quotes, asset => asset.Symbol, quote => quote.Symbol, (asset, quote) => quote != null ? asset.Amount * quote.Price : 0)
+                    .Sum();
             }
             else
             {
                 TotalValue = 0;
             }
-            
         }
     }
 }

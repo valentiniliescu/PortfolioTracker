@@ -62,6 +62,7 @@
     <Compile Include="PAS\PortfolioStoreLoadException.cs" />
     <Compile Include="PAS\PortfolioStoreSaveException.cs" />
     <Compile Include="PAS\QuoteLoader.cs" />
+    <Compile Include="PAS\QuoteLoaderDelegate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AssetFormatter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
