@@ -9,6 +9,7 @@ using PortfolioTracker.PAS;
 namespace PortfolioTrackerTests.PAS
 {
     [TestClass]
+    [Ignore]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public class QuoteLoaderTests
     {
