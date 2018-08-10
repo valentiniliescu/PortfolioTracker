@@ -52,7 +52,7 @@ namespace PortfolioTrackerTests.Model
         }
 
         [TestMethod]
-        public async Task Calculate_should_set_total_value()
+        public void Calculate_should_set_total_value()
         {
             var portfolioStore = new InMemoryPortfolioStore();
             Func<IEnumerable<Symbol>, Task<IEnumerable<Quote>>> quoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
@@ -61,7 +61,7 @@ namespace PortfolioTrackerTests.Model
             portfolioWithValue.Load();
             portfolioWithValue.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolioWithValue.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            await portfolioWithValue.Calculate();
+            portfolioWithValue.Calculate();
 
             portfolioWithValue.TotalValue.Should().Be(2000);
         }

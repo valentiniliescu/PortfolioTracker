@@ -29,6 +29,16 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
+        public void Portfolio_value_description_should_call_formatter()
+        {
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
+
+            LambdaExpression fromPropertyGetter = LambdaExpressionConverter.FromPropertyGetter(viewModel, nameof(viewModel.PortfolioValueDescription));
+
+            CheckIsStaticMethodCallOnProperty(fromPropertyGetter, typeof(PortfolioValueFormatter), nameof(PortfolioValueFormatter.Format), viewModel.GetType(), nameof(viewModel.TotalValue));
+        }
+
+        [TestMethod]
         public void Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
         {
             var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
@@ -59,6 +69,25 @@ namespace PortfolioTrackerTests.ViewModel
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
                 viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
+            }
+        }
+
+        [TestMethod]
+        public void Calculate_should_change_total_value_and_fire_property_changed_event()
+        {
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)))));
+            viewModel.Load();
+
+            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
+            {
+                viewModel.NewAssetSymbol = "MSFT";
+                viewModel.NewAssetAmount = 100;
+                viewModel.AddAsset();
+
+                viewModel.Calculate();
+
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioValueDescription);
+                viewModel.TotalValue.Should().Be(10000);
             }
         }
 

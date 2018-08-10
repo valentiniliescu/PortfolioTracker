@@ -61,6 +61,16 @@ namespace PortfolioTrackerTests.View
             CheckBinding(window.ErrorTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.ErrorMessage));
         }
 
+        [TestMethod]
+        public void Value_text_block_should_be_bound_to_portfolio_value_description_of_view_model()
+        {
+            var viewModel = new MainViewModel(new PortfolioWithValue(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)))));
+
+            var window = new MainWindow(viewModel);
+
+            CheckBinding(window.ValueTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.PortfolioValueDescription));
+        }
+
         // TODO: find a better way to test the event bindings
 #if DEBUG
         [TestMethod]
