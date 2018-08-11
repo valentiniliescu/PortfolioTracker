@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
@@ -15,67 +16,67 @@ namespace PortfolioTrackerTests.PAS
         protected abstract IPortfolioStore CreatePortfolioStoreWithLoadError();
 
         [TestMethod]
-        public void Loading_twice_should_return_different_portfolios()
+        public async Task Loading_twice_should_return_different_portfolios()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
 
-            Portfolio loadedPortfolio1 = portfolioStore.Load();
-            Portfolio loadedPortfolio2 = portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await portfolioStore.Load();
+            Portfolio loadedPortfolio2 = await portfolioStore.Load();
 
             loadedPortfolio1.Should().NotBeSameAs(loadedPortfolio2);
 
-            portfolioStore.Save(null);
+            await portfolioStore.Save(null);
         }
 
         [TestMethod]
-        public void Loading_after_saving_should_return_portfolio_with_the_same_assets()
+        public async Task Loading_after_saving_should_return_portfolio_with_the_same_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
             var savedPortfolio = new Portfolio();
             savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
-            portfolioStore.Save(savedPortfolio);
+            await portfolioStore.Save(savedPortfolio);
 
-            Portfolio loadedPortfolio = portfolioStore.Load();
+            Portfolio loadedPortfolio = await portfolioStore.Load();
 
             loadedPortfolio.Assets.Should().BeEquivalentTo(savedPortfolio.Assets);
 
-            portfolioStore.Save(null);
+            await portfolioStore.Save(null);
         }
 
         [TestMethod]
-        public void Loading_without_saving_should_return_portfolios_with_the_same_assets()
+        public async Task Loading_without_saving_should_return_portfolios_with_the_same_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
             var savedPortfolio = new Portfolio();
             savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
-            portfolioStore.Save(savedPortfolio);
+            await portfolioStore.Save(savedPortfolio);
 
-            Portfolio loadedPortfolio1 = portfolioStore.Load();
-            Portfolio loadedPortfolio2 = portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await portfolioStore.Load();
+            Portfolio loadedPortfolio2 = await portfolioStore.Load();
 
             loadedPortfolio1.Assets.Should().BeEquivalentTo(loadedPortfolio2.Assets);
 
-            portfolioStore.Save(null);
+            await portfolioStore.Save(null);
         }
 
         [TestMethod]
-        public void Loading_with_saving_in_between_should_return_portfolios_with_different_assets()
+        public async Task Loading_with_saving_in_between_should_return_portfolios_with_different_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
             var savePortfolio = new Portfolio();
             savePortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
-            portfolioStore.Save(savePortfolio);
+            await portfolioStore.Save(savePortfolio);
 
-            Portfolio loadedPortfolio1 = portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await portfolioStore.Load();
 
             savePortfolio.AddAsset(new Asset(new Symbol("AAPL"), 100));
-            portfolioStore.Save(savePortfolio);
+            await portfolioStore.Save(savePortfolio);
 
-            Portfolio loadedPortfolio2 = portfolioStore.Load();
+            Portfolio loadedPortfolio2 = await portfolioStore.Load();
 
             loadedPortfolio1.Assets.Should().NotBeEquivalentTo(loadedPortfolio2.Assets);
 
-            portfolioStore.Save(null);
+            await portfolioStore.Save(null);
         }
 
         [TestMethod]
@@ -83,7 +84,7 @@ namespace PortfolioTrackerTests.PAS
         {
             IPortfolioStore portfolioStore = CreatePortfolioStoreWithSaveError();
 
-            Action action = () => portfolioStore.Save(new Portfolio());
+            Func<Task> action = async () => await portfolioStore.Save(new Portfolio());
 
             action.Should().Throw<PortfolioStoreSaveException>();
         }
@@ -93,8 +94,7 @@ namespace PortfolioTrackerTests.PAS
         {
             IPortfolioStore portfolioStore = CreatePortfolioStoreWithLoadError();
 
-            // ReSharper disable once MustUseReturnValue
-            Action action = () => portfolioStore.Load();
+            Func<Task<Portfolio>> action = async () => await portfolioStore.Load();
 
             action.Should().Throw<PortfolioStoreLoadException>();
         }

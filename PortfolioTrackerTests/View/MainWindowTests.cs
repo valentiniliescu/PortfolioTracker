@@ -83,7 +83,6 @@ namespace PortfolioTrackerTests.View
                 EventBindingExtension.EventBindingStore.Should().BeEquivalentTo(
                     new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(MainWindow.Loaded), viewModel, nameof(MainViewModel.Load)),
                     new Tuple<DependencyObject, string, object, string>(mainWindow.AddAssetButton, nameof(Button.Click), viewModel, nameof(MainViewModel.AddAsset)),
-                    new Tuple<DependencyObject, string, object, string>(mainWindow.CalculateButton, nameof(Button.Click), viewModel, nameof(MainViewModel.Calculate)),
                     new Tuple<DependencyObject, string, object, string>(mainWindow, nameof(Window.Closing), viewModel, nameof(MainViewModel.Save))
                 );
             }

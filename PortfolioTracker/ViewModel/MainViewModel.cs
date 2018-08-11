@@ -51,12 +51,14 @@ namespace PortfolioTracker.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Load()
+        public async Task Load()
         {
             try
             {
-                _portfolioWithValue.Load();
+                await _portfolioWithValue.Load();
                 OnPropertyChanged(nameof(PortfolioDescription));
+                await _portfolioWithValue.Calculate();
+                OnPropertyChanged(nameof(PortfolioValueDescription));
             }
             catch (PortfolioStoreLoadException exception)
             {
@@ -64,26 +66,13 @@ namespace PortfolioTracker.ViewModel
             }
         }
 
-        public void Save()
+        public async Task Save()
         {
             try
             {
-                _portfolioWithValue.Save();
+                await _portfolioWithValue.Save();
             }
             catch (PortfolioStoreSaveException exception)
-            {
-                ErrorMessage = exception.Message;
-            }
-        }
-
-        public async Task Calculate()
-        {
-            try
-            {
-                await _portfolioWithValue.Calculate();
-                OnPropertyChanged(nameof(PortfolioValueDescription));
-            }
-            catch (Exception exception)
             {
                 ErrorMessage = exception.Message;
             }
@@ -95,7 +84,7 @@ namespace PortfolioTracker.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void AddAsset()
+        public async Task AddAsset()
         {
             if (Portfolio != null && NewAssetSymbol != null)
             {
@@ -103,6 +92,7 @@ namespace PortfolioTracker.ViewModel
                 {
                     _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
+                    await _portfolioWithValue.Calculate();
                     OnPropertyChanged(nameof(PortfolioValueDescription));
                 }
                 catch (Exception exception)

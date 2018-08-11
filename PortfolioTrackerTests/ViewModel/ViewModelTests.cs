@@ -39,7 +39,7 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
-        public void Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
+        public async Task Loading_assets_should_change_the_portfolio_and_fire_property_changed_event()
         {
             var viewModel = new MainViewModel();
 
@@ -47,46 +47,32 @@ namespace PortfolioTrackerTests.ViewModel
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
-                viewModel.Load();
+                await viewModel.Load();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-
                 viewModel.Portfolio.Assets.Should().BeEmpty();
+
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioValueDescription);
+                viewModel.TotalValue.Should().Be(0);
             }
         }
 
         [TestMethod]
-        public void Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
-        {
-            var viewModel = new MainViewModel();
-            viewModel.Load();
-
-            using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
-            {
-                viewModel.NewAssetSymbol = "MSFT";
-                viewModel.NewAssetAmount = 100;
-                viewModel.AddAsset();
-
-                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
-                viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
-            }
-        }
-
-        [TestMethod]
-        public async Task Calculate_should_change_total_value_and_fire_property_changed_event()
+        public async Task Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
         {
             QuoteLoaderDelegate quoteLoaderPrice100 = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
 
             var viewModel = new MainViewModel(new PortfolioWithValue(quoteLoaderPrice100));
-            viewModel.Load();
+            await viewModel.Load();
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
                 viewModel.NewAssetSymbol = "MSFT";
                 viewModel.NewAssetAmount = 100;
-                viewModel.AddAsset();
+                await viewModel.AddAsset();
 
-                await viewModel.Calculate();
+                viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioDescription);
+                viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioValueDescription);
                 viewModel.TotalValue.Should().Be(10000);
@@ -94,31 +80,31 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
-        public void Saving_should_save_the_assets_till_next_load()
+        public async Task Saving_should_save_the_assets_till_next_load()
         {
             var viewModel = new MainViewModel();
-            viewModel.Load();
+            await viewModel.Load();
 
             viewModel.NewAssetSymbol = "MSFT";
             viewModel.NewAssetAmount = 100;
-            viewModel.AddAsset();
+            await viewModel.AddAsset();
 
-            viewModel.Save();
+            await viewModel.Save();
 
             viewModel.NewAssetSymbol = "AAPL";
             viewModel.NewAssetAmount = 10;
-            viewModel.AddAsset();
+            await viewModel.AddAsset();
 
-            viewModel.Load();
+            await viewModel.Load();
 
             viewModel.Portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 100));
         }
 
         [TestMethod]
-        public void Adding_invalid_asset_should_set_error_message()
+        public async Task Adding_invalid_asset_should_set_error_message()
         {
             var viewModel = new MainViewModel();
-            viewModel.Load();
+            await viewModel.Load();
 
             viewModel.ErrorMessage.Should().BeNull();
 
@@ -126,7 +112,7 @@ namespace PortfolioTrackerTests.ViewModel
             {
                 viewModel.NewAssetSymbol = "MSFT";
                 viewModel.NewAssetAmount = -10;
-                viewModel.AddAsset();
+                await viewModel.AddAsset();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
                 viewModel.ErrorMessage.Should().NotBeNull();
@@ -134,14 +120,14 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
-        public void Store_loading_error_should_set_error_message()
+        public async Task Store_loading_error_should_set_error_message()
         {
             var portfolioStoreWithThrowOnLoad = new InMemoryPortfolioStore {ThrowOnLoad = true};
             var viewModel = new MainViewModel(new PortfolioWithValue(portfolioStoreWithThrowOnLoad));
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
-                viewModel.Load();
+                await viewModel.Load();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
                 viewModel.ErrorMessage.Should().NotBeNull();
@@ -149,14 +135,14 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
-        public void Store_saving_error_should_set_error_message()
+        public async Task Store_saving_error_should_set_error_message()
         {
             var portfolioStoreWithThrowOnSave = new InMemoryPortfolioStore {ThrowOnSave = true};
             var viewModel = new MainViewModel(new PortfolioWithValue(portfolioStoreWithThrowOnSave));
 
             using (IMonitor<MainViewModel> viewModelMonitored = viewModel.Monitor())
             {
-                viewModel.Save();
+                await viewModel.Save();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.ErrorMessage);
                 viewModel.ErrorMessage.Should().NotBeNull();

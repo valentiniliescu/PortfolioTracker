@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
@@ -12,7 +13,7 @@ namespace PortfolioTracker.PAS
 
         public bool ThrowOnSave { private get; set; }
 
-        public Portfolio Load()
+        public Task<Portfolio> Load()
         {
             if (ThrowOnLoad)
             {
@@ -24,10 +25,10 @@ namespace PortfolioTracker.PAS
                 _portfolio = new Portfolio();
             }
 
-            return _portfolio.Clone();
+            return Task.FromResult(_portfolio.Clone());
         }
 
-        public void Save(Portfolio portfolio)
+        public Task Save(Portfolio portfolio)
         {
             if (ThrowOnSave)
             {
@@ -35,6 +36,8 @@ namespace PortfolioTracker.PAS
             }
 
             _portfolio = portfolio?.Clone();
+
+            return Task.CompletedTask;
         }
     }
 }

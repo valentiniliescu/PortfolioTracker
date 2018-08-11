@@ -22,21 +22,21 @@ namespace PortfolioTrackerTests.Model
         }
 
         [TestMethod]
-        public void Portfolio_should_be_empty_after_loading()
+        public async Task Portfolio_should_be_empty_after_loading()
         {
             var portfolioWithValue = new PortfolioWithValue();
 
-            portfolioWithValue.Load();
+            await portfolioWithValue.Load();
 
             portfolioWithValue.Portfolio.HasAssets.Should().BeFalse();
         }
 
         [TestMethod]
-        public void Portfolio_should_have_assets_after_adding_assets()
+        public async Task Portfolio_should_have_assets_after_adding_assets()
         {
             var portfolioWithValue = new PortfolioWithValue();
 
-            portfolioWithValue.Load();
+            await portfolioWithValue.Load();
             portfolioWithValue.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolioWithValue.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
@@ -44,13 +44,13 @@ namespace PortfolioTrackerTests.Model
         }
 
         [TestMethod]
-        public void Calculate_should_set_total_value()
+        public async Task Calculate_should_set_total_value()
         {
             QuoteLoaderDelegate quoteLoaderPrice100 = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
 
             var portfolioWithValue = new PortfolioWithValue(quoteLoaderPrice100);
 
-            portfolioWithValue.Load();
+            await portfolioWithValue.Load();
             portfolioWithValue.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolioWithValue.AddAsset(new Asset(new Symbol("AAPL"), 10));
 #pragma warning disable 4014

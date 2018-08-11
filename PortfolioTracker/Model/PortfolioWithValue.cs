@@ -36,14 +36,15 @@ namespace PortfolioTracker.Model
         [CanBeNull]
         public Portfolio Portfolio { get; private set; }
 
-        public void Load()
+        public async Task Load()
         {
-            Portfolio = _portfolioStore.Load();
+            Portfolio = await _portfolioStore.Load();
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _portfolioStore.Save(Portfolio);
+            // ReSharper disable once PossibleNullReferenceException
+            await _portfolioStore.Save(Portfolio);
         }
 
         public void AddAsset([NotNull] Asset newAsset)

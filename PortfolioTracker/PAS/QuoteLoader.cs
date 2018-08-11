@@ -32,5 +32,7 @@ namespace PortfolioTracker.PAS
             // ReSharper restore PossibleNullReferenceException
             // ReSharper restore AssignNullToNotNullAttribute
         }
+
+        // TODO: add error handling
     }
 }

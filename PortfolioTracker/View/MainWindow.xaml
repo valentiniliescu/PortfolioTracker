@@ -26,10 +26,6 @@
             <TextBox Name="NewAssetAmountTextBox" x:FieldModifier="public" Text="{Binding Path=NewAssetAmount}" />
             <Button Name="AddAssetButton" x:FieldModifier="public" Click="{helpers:EventBinding AddAsset}">Add asset</Button>
         </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <TextBlock Name="ValueTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioValueDescription}" />
-            <Button Name="CalculateButton" x:FieldModifier="public" Click="{helpers:EventBinding Calculate}">Calculate</Button>
-        </StackPanel>
         <TextBlock Name="ErrorTextBlock" x:FieldModifier="public"
                    Text="{Binding Path=ErrorMessage, NotifyOnTargetUpdated=True}" Foreground="Red"
                    DockPanel.Dock="Bottom">
@@ -50,7 +46,7 @@
             </TextBlock.Triggers>
         </TextBlock>
         <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
-
+        <TextBlock Name="ValueTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioValueDescription}" />
     </DockPanel>
 </Window>
 <!-- ReSharper restore Xaml.BindingWithoutContextNotResolved -->
