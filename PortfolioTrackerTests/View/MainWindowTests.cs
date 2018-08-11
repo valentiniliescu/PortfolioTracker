@@ -7,7 +7,6 @@ using System.Windows.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Helpers;
-using PortfolioTracker.PAS;
 using PortfolioTracker.View;
 using PortfolioTracker.ViewModel;
 
@@ -21,7 +20,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Main_text_block_should_be_bound_to_portfolio_description_of_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel();
 
             var window = new MainWindow(viewModel);
 
@@ -31,7 +30,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void New_asset_symbol_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel();
 
             var window = new MainWindow(viewModel);
 
@@ -41,7 +40,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void New_asset_amount_text_box_should_be_bound_to_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel();
 
             var window = new MainWindow(viewModel);
 
@@ -51,11 +50,21 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Error_text_block_should_be_bound_to_error_message_of_view_model()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel();
 
             var window = new MainWindow(viewModel);
 
             CheckBinding(window.ErrorTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.ErrorMessage));
+        }
+
+        [TestMethod]
+        public void Value_text_block_should_be_bound_to_portfolio_value_description_of_view_model()
+        {
+            var viewModel = new MainViewModel();
+
+            var window = new MainWindow(viewModel);
+
+            CheckBinding(window.ValueTextBlock, TextBlock.TextProperty, viewModel, nameof(MainViewModel.PortfolioValueDescription));
         }
 
         // TODO: find a better way to test the event bindings
@@ -63,7 +72,7 @@ namespace PortfolioTrackerTests.View
         [TestMethod]
         public void Event_bindings_should_be_set()
         {
-            var viewModel = new MainViewModel(new InMemoryPortfolioStore());
+            var viewModel = new MainViewModel();
 
             try
             {

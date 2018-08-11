@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using JetBrains.Annotations;
@@ -75,7 +76,7 @@ namespace PortfolioTracker.Helpers
 
             MethodInfo method = dataContextType.GetMethod(eventHandlerName);
 
-            if (method != null && !method.IsStatic && method.GetParameters().Length == 0 && method.ReturnType == typeof(void))
+            if (method != null && !method.IsStatic && method.GetParameters().Length == 0 && (method.ReturnType == typeof(void) || method.ReturnType == typeof(Task)))
             {
                 EventHandler handler = (sender, args) => { method.Invoke(dataContext, new object[0]); };
 

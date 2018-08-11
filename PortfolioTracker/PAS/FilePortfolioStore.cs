@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using PortfolioTracker.Model;
@@ -23,7 +24,7 @@ namespace PortfolioTracker.PAS
         {
         }
 
-        public Portfolio Load()
+        public async Task<Portfolio> Load()
         {
             try
             {
@@ -31,7 +32,13 @@ namespace PortfolioTracker.PAS
 
                 if (File.Exists(_filePath))
                 {
-                    string json = File.ReadAllText(_filePath);
+                    string json;
+                    using (var reader = new StreamReader(_filePath))
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        json = await reader.ReadToEndAsync();
+                    }
+
                     portfolio = JsonConvert.DeserializeObject<Portfolio>(json, new PortfolioJsonConverter());
                     if (portfolio == null)
                     {
@@ -51,14 +58,19 @@ namespace PortfolioTracker.PAS
             }
         }
 
-        public void Save(Portfolio portfolio)
+        public async Task Save(Portfolio portfolio)
         {
             try
             {
                 if (portfolio != null)
                 {
                     string json = JsonConvert.SerializeObject(portfolio, Formatting.Indented, new PortfolioJsonConverter());
-                    File.WriteAllText(_filePath, json);
+
+                    using (var writer = new StreamWriter(_filePath))
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        await writer.WriteAsync(json);
+                    }
                 }
                 else
                 {

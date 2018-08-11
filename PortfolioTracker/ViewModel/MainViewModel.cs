@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
@@ -9,20 +10,32 @@ namespace PortfolioTracker.ViewModel
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        [NotNull] private readonly IPortfolioStore _portfolioStore;
+        [NotNull] private readonly PortfolioWithValue _portfolioWithValue;
         [CanBeNull] private string _errorMessage;
 
-        public MainViewModel([NotNull] IPortfolioStore portfolioStore)
+        public MainViewModel([NotNull] PortfolioWithValue portfolioWithValue)
         {
-            _portfolioStore = portfolioStore;
+            _portfolioWithValue = portfolioWithValue;
+        }
+
+        public MainViewModel() : this(new PortfolioWithValue())
+        {
         }
 
         [CanBeNull]
-        public Portfolio Portfolio { get; private set; }
+        [ProvidesContext]
+        public Portfolio Portfolio => _portfolioWithValue.Portfolio;
+
+        [ProvidesContext]
+        public decimal TotalValue => _portfolioWithValue.TotalValue;
 
         [CanBeNull]
         [ExcludeFromCodeCoverage]
         public string PortfolioDescription => PortfolioFormatter.Format(Portfolio);
+
+        [CanBeNull]
+        [ExcludeFromCodeCoverage]
+        public string PortfolioValueDescription => PortfolioValueFormatter.Format(TotalValue);
 
         [CanBeNull]
         public string ErrorMessage
@@ -40,12 +53,14 @@ namespace PortfolioTracker.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Load()
+        public async Task Load()
         {
             try
             {
-                Portfolio = _portfolioStore.Load();
+                await _portfolioWithValue.Load();
                 OnPropertyChanged(nameof(PortfolioDescription));
+                await _portfolioWithValue.Calculate();
+                OnPropertyChanged(nameof(PortfolioValueDescription));
             }
             catch (PortfolioStoreLoadException exception)
             {
@@ -53,11 +68,11 @@ namespace PortfolioTracker.ViewModel
             }
         }
 
-        public void Save()
+        public async Task Save()
         {
             try
             {
-                _portfolioStore.Save(Portfolio);
+                await _portfolioWithValue.Save();
             }
             catch (PortfolioStoreSaveException exception)
             {
@@ -71,14 +86,16 @@ namespace PortfolioTracker.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void AddAsset()
+        public async Task AddAsset()
         {
             if (Portfolio != null && NewAssetSymbol != null)
             {
                 try
                 {
-                    Portfolio.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
+                    _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
+                    await _portfolioWithValue.Calculate();
+                    OnPropertyChanged(nameof(PortfolioValueDescription));
                 }
                 catch (Exception exception)
                 {

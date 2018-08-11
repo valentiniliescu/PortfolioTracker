@@ -11,6 +11,10 @@
             <Setter Property="MinWidth" Value="100" />
             <Setter Property="Margin" Value="2" />
         </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
         <Style TargetType="Button">
             <Setter Property="MinWidth" Value="100" />
             <Setter Property="Margin" Value="2" />
@@ -42,6 +46,7 @@
             </TextBlock.Triggers>
         </TextBlock>
         <TextBlock Name="MainTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioDescription}" />
+        <TextBlock Name="ValueTextBlock" x:FieldModifier="public" Text="{Binding Path=PortfolioValueDescription}" />
     </DockPanel>
 </Window>
 <!-- ReSharper restore Xaml.BindingWithoutContextNotResolved -->

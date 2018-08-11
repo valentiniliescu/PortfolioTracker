@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
@@ -6,9 +7,11 @@ namespace PortfolioTracker.PAS
     public interface IPortfolioStore
     {
         [NotNull]
+        [ItemNotNull]
         [MustUseReturnValue]
-        Portfolio Load();
+        Task<Portfolio> Load();
 
-        void Save([CanBeNull] Portfolio portfolio);
+        [NotNull]
+        Task Save([CanBeNull] Portfolio portfolio);
     }
 }

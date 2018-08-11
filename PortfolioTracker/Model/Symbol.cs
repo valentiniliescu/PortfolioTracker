@@ -14,9 +14,7 @@ namespace PortfolioTracker.Model
 
         public override bool Equals(object obj)
         {
-            var otherSymbol = obj as Symbol;
-
-            return otherSymbol != null
+            return obj is Symbol otherSymbol
                    && Text == otherSymbol.Text;
         }
 
