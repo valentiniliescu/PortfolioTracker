@@ -73,7 +73,7 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
-        public void Calculate_should_change_total_value_and_fire_property_changed_event()
+        public async Task Calculate_should_change_total_value_and_fire_property_changed_event()
         {
             QuoteLoaderDelegate quoteLoaderPrice100 = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
 
@@ -86,7 +86,7 @@ namespace PortfolioTrackerTests.ViewModel
                 viewModel.NewAssetAmount = 100;
                 viewModel.AddAsset();
 
-                viewModel.Calculate();
+                await viewModel.Calculate();
 
                 viewModelMonitored.Should().RaisePropertyChangeFor(vm => vm.PortfolioValueDescription);
                 viewModel.TotalValue.Should().Be(10000);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 using PortfolioTracker.PAS;
@@ -75,7 +76,7 @@ namespace PortfolioTracker.ViewModel
             }
         }
 
-        public async void Calculate()
+        public async Task Calculate()
         {
             try
             {
