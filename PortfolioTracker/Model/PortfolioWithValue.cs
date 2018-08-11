@@ -17,6 +17,20 @@ namespace PortfolioTracker.Model
             _quoteLoader = quoteLoader;
         }
 
+        // ReSharper disable once AssignNullToNotNullAttribute
+        public PortfolioWithValue() : this(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))))
+        {
+        }
+
+        public PortfolioWithValue([NotNull] QuoteLoaderDelegate quoteLoader) : this(new InMemoryPortfolioStore(), quoteLoader)
+        {
+        }
+
+        // ReSharper disable once AssignNullToNotNullAttribute
+        public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore) : this(portfolioStore, symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))))
+        {
+        }
+
         public decimal TotalValue { get; private set; }
 
         [CanBeNull]

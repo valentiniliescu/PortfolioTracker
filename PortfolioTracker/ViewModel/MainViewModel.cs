@@ -17,6 +17,10 @@ namespace PortfolioTracker.ViewModel
             _portfolioWithValue = portfolioWithValue;
         }
 
+        public MainViewModel() : this(new PortfolioWithValue())
+        {
+        }
+
         [CanBeNull]
         public Portfolio Portfolio => _portfolioWithValue.Portfolio;
 
