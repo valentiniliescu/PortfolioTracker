@@ -18,7 +18,6 @@ namespace PortfolioTracker.ViewModel
             }
 
             if (portfolio.HasAssets)
-
             {
                 IEnumerable<string> assetsText = portfolio.Assets.Select(AssetFormatter.Format);
                 return $"You have {string.Join(", ", assetsText)} shares";

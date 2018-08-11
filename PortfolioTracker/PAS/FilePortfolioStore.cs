@@ -44,7 +44,6 @@ namespace PortfolioTracker.PAS
                     {
                         throw new NullReferenceException();
                     }
-                    
                 }
                 else
                 {
@@ -72,7 +71,6 @@ namespace PortfolioTracker.PAS
                         // ReSharper disable once PossibleNullReferenceException
                         await writer.WriteAsync(json);
                     }
-                    
                 }
                 else
                 {

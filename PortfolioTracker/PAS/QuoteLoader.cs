@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -19,7 +20,7 @@ namespace PortfolioTracker.PAS
         public static async Task<IEnumerable<Quote>> Load([NotNull] [ItemNotNull] IEnumerable<Symbol> symbols)
         {
             string symbolTextList = string.Join(",", symbols.Select(symbol => symbol.Text));
-            var uri = new Uri($"https://api.iextrading.com/1.0/stock/market/batch?symbols={symbolTextList}&types=price");
+            var uri = new Uri($"https://api.iextrading.com/1.0/stock/market/batch?symbols={WebUtility.UrlEncode(symbolTextList)}&types=price");
 
             // ReSharper disable once PossibleNullReferenceException
             string json = await HttpClient.GetStringAsync(uri);

@@ -23,8 +23,10 @@ namespace PortfolioTracker.ViewModel
         }
 
         [CanBeNull]
+        [ProvidesContext]
         public Portfolio Portfolio => _portfolioWithValue.Portfolio;
 
+        [ProvidesContext]
         public decimal TotalValue => _portfolioWithValue.TotalValue;
 
         [CanBeNull]

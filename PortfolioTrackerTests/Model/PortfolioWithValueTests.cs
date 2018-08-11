@@ -46,6 +46,7 @@ namespace PortfolioTrackerTests.Model
         [TestMethod]
         public async Task Calculate_should_set_total_value()
         {
+            // ReSharper disable once ConvertToLocalFunction
             QuoteLoaderDelegate quoteLoaderPrice100 = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
 
             var portfolioWithValue = new PortfolioWithValue(quoteLoaderPrice100);

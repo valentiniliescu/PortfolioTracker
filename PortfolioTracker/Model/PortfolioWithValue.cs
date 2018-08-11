@@ -8,6 +8,8 @@ namespace PortfolioTracker.Model
 {
     public sealed class PortfolioWithValue
     {
+        // ReSharper disable once AssignNullToNotNullAttribute
+        [NotNull] private static readonly QuoteLoaderDelegate DefaultQuoteLoader = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0)));
         [NotNull] private readonly IPortfolioStore _portfolioStore;
         [NotNull] private readonly QuoteLoaderDelegate _quoteLoader;
 
@@ -17,8 +19,7 @@ namespace PortfolioTracker.Model
             _quoteLoader = quoteLoader;
         }
 
-        // ReSharper disable once AssignNullToNotNullAttribute
-        public PortfolioWithValue() : this(new InMemoryPortfolioStore(), symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))))
+        public PortfolioWithValue() : this(new InMemoryPortfolioStore(), DefaultQuoteLoader)
         {
         }
 
@@ -26,8 +27,7 @@ namespace PortfolioTracker.Model
         {
         }
 
-        // ReSharper disable once AssignNullToNotNullAttribute
-        public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore) : this(portfolioStore, symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 0))))
+        public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore) : this(portfolioStore, DefaultQuoteLoader)
         {
         }
 
@@ -43,7 +43,6 @@ namespace PortfolioTracker.Model
 
         public async Task Save()
         {
-            // ReSharper disable once PossibleNullReferenceException
             await _portfolioStore.Save(Portfolio);
         }
 

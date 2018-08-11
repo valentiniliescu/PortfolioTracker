@@ -5,5 +5,7 @@ using PortfolioTracker.Model;
 
 namespace PortfolioTracker.PAS
 {
+    [NotNull]
+    [ItemNotNull]
     public delegate Task<IEnumerable<Quote>> QuoteLoaderDelegate([NotNull] [ItemNotNull] IEnumerable<Symbol> symbols);
 }

@@ -60,6 +60,7 @@ namespace PortfolioTrackerTests.ViewModel
         [TestMethod]
         public async Task Adding_an_asset_should_change_the_portfolio_assets_and_fire_property_changed_event()
         {
+            // ReSharper disable once ConvertToLocalFunction
             QuoteLoaderDelegate quoteLoaderPrice100 = symbols => Task.FromResult(symbols.Select(symbol => new Quote(symbol, 100)));
 
             var viewModel = new MainViewModel(new PortfolioWithValue(quoteLoaderPrice100));
