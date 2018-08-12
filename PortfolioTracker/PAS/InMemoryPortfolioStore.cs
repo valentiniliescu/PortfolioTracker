@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
@@ -13,11 +12,17 @@ namespace PortfolioTracker.PAS
 
         public bool ThrowOnSave { private get; set; }
 
-        public Task<Portfolio> Load()
+        public event EventHandler<Portfolio> PortfolioLoaded;
+        public event EventHandler<PortfolioStoreLoadException> PortfolioErrorOnLoad;
+
+        public event EventHandler PortfolioSaved;
+        public event EventHandler<PortfolioStoreSaveException> PortfolioErrorOnSave;
+
+        public void Load()
         {
             if (ThrowOnLoad)
             {
-                throw new PortfolioStoreLoadException("Error loading the store", new Exception());
+                PortfolioErrorOnLoad?.Invoke(this, new PortfolioStoreLoadException("Error loading the store", new Exception()));
             }
 
             if (_portfolio == null)
@@ -25,19 +30,19 @@ namespace PortfolioTracker.PAS
                 _portfolio = new Portfolio();
             }
 
-            return Task.FromResult(_portfolio.Clone());
+            PortfolioLoaded?.Invoke(this, _portfolio.Clone());
         }
 
-        public Task Save(Portfolio portfolio)
+        public void Save(Portfolio portfolio)
         {
             if (ThrowOnSave)
             {
-                throw new PortfolioStoreSaveException("Error saving the store", new Exception());
+                PortfolioErrorOnSave?.Invoke(this, new PortfolioStoreSaveException("Error saving the store", new Exception()));
             }
 
             _portfolio = portfolio?.Clone();
 
-            return Task.CompletedTask;
+            PortfolioSaved?.Invoke(this, EventArgs.Empty);
         }
     }
 }

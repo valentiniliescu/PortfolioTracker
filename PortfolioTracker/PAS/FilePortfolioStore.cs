@@ -15,6 +15,12 @@ namespace PortfolioTracker.PAS
 
         [NotNull] private readonly string _filePath;
 
+        public event EventHandler<Portfolio> PortfolioLoaded;
+        public event EventHandler<PortfolioStoreLoadException> PortfolioErrorOnLoad;
+
+        public event EventHandler PortfolioSaved;
+        public event EventHandler<PortfolioStoreSaveException> PortfolioErrorOnSave;
+
         public FilePortfolioStore([NotNull] string filePath)
         {
             _filePath = filePath;
@@ -24,7 +30,7 @@ namespace PortfolioTracker.PAS
         {
         }
 
-        public async Task<Portfolio> Load()
+        public async void Load()
         {
             try
             {
@@ -50,15 +56,15 @@ namespace PortfolioTracker.PAS
                     portfolio = new Portfolio();
                 }
 
-                return portfolio;
+                PortfolioLoaded?.Invoke(this, portfolio);
             }
             catch (Exception exception)
             {
-                throw new PortfolioStoreLoadException("Error loading portfolio", exception);
+                PortfolioErrorOnLoad?.Invoke(this, new PortfolioStoreLoadException("Error loading portfolio", exception));
             }
         }
 
-        public async Task Save(Portfolio portfolio)
+        public async void Save(Portfolio portfolio)
         {
             try
             {
@@ -79,10 +85,12 @@ namespace PortfolioTracker.PAS
                         File.Delete(_filePath);
                     }
                 }
+
+                PortfolioSaved?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception exception)
             {
-                throw new PortfolioStoreSaveException("Error saving portfolio", exception);
+                PortfolioErrorOnSave?.Invoke(this, new PortfolioStoreSaveException("Error saving portfolio", exception));
             }
         }
     }

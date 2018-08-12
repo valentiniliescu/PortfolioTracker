@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
@@ -6,12 +6,12 @@ namespace PortfolioTracker.PAS
 {
     public interface IPortfolioStore
     {
-        [NotNull]
-        [ItemNotNull]
-        [MustUseReturnValue]
-        Task<Portfolio> Load();
+        void Load();
+        event EventHandler<Portfolio> PortfolioLoaded;
+        event EventHandler<PortfolioStoreLoadException> PortfolioErrorOnLoad;
 
-        [NotNull]
-        Task Save([CanBeNull] Portfolio portfolio);
+        void Save([CanBeNull] Portfolio portfolio);
+        event EventHandler PortfolioSaved;
+        event EventHandler<PortfolioStoreSaveException> PortfolioErrorOnSave;
     }
 }
