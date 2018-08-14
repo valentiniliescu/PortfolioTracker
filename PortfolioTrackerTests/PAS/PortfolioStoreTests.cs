@@ -20,8 +20,8 @@ namespace PortfolioTrackerTests.PAS
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
 
-            Portfolio loadedPortfolio1 = await portfolioStore.Load();
-            Portfolio loadedPortfolio2 = await portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await GetLoadedPortfolio(portfolioStore);
+            Portfolio loadedPortfolio2 = await GetLoadedPortfolio(portfolioStore);
 
             loadedPortfolio1.Should().NotBeSameAs(loadedPortfolio2);
 
@@ -36,7 +36,7 @@ namespace PortfolioTrackerTests.PAS
             savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             await portfolioStore.Save(savedPortfolio);
 
-            Portfolio loadedPortfolio = await portfolioStore.Load();
+            Portfolio loadedPortfolio = await GetLoadedPortfolio(portfolioStore);
 
             loadedPortfolio.Assets.Should().BeEquivalentTo(savedPortfolio.Assets);
 
@@ -51,8 +51,8 @@ namespace PortfolioTrackerTests.PAS
             savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             await portfolioStore.Save(savedPortfolio);
 
-            Portfolio loadedPortfolio1 = await portfolioStore.Load();
-            Portfolio loadedPortfolio2 = await portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await GetLoadedPortfolio(portfolioStore);
+            Portfolio loadedPortfolio2 = await GetLoadedPortfolio(portfolioStore);
 
             loadedPortfolio1.Assets.Should().BeEquivalentTo(loadedPortfolio2.Assets);
 
@@ -67,12 +67,12 @@ namespace PortfolioTrackerTests.PAS
             savePortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             await portfolioStore.Save(savePortfolio);
 
-            Portfolio loadedPortfolio1 = await portfolioStore.Load();
+            Portfolio loadedPortfolio1 = await GetLoadedPortfolio(portfolioStore);
 
             savePortfolio.AddAsset(new Asset(new Symbol("AAPL"), 100));
             await portfolioStore.Save(savePortfolio);
 
-            Portfolio loadedPortfolio2 = await portfolioStore.Load();
+            Portfolio loadedPortfolio2 = await GetLoadedPortfolio(portfolioStore);
 
             loadedPortfolio1.Assets.Should().NotBeEquivalentTo(loadedPortfolio2.Assets);
 
@@ -80,23 +80,38 @@ namespace PortfolioTrackerTests.PAS
         }
 
         [TestMethod]
-        public void Saving_error_should_throw_PortfolioStoreSaveException()
+        public async Task Saving_error_should_throw_PortfolioStoreSaveException()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStoreWithSaveError();
 
-            Func<Task> action = async () => await portfolioStore.Save(new Portfolio());
-
-            action.Should().Throw<PortfolioStoreSaveException>();
+            using (var monitoredSubject = portfolioStore.Monitor())
+            {
+                await portfolioStore.Save(new Portfolio());
+                monitoredSubject.Should().Raise(nameof(portfolioStore.PortfolioErrorOnSave));
+            }
         }
 
         [TestMethod]
-        public void Loading_error_should_throw_PortfolioStoreLoadException()
+        public async Task Loading_error_should_throw_PortfolioStoreLoadException()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStoreWithLoadError();
+            using (var monitoredSubject = portfolioStore.Monitor())
+            {
+                await portfolioStore.Load();
+                monitoredSubject.Should().Raise(nameof(portfolioStore.PortfolioErrorOnLoad));
+            }
+        }
 
-            Func<Task<Portfolio>> action = async () => await portfolioStore.Load();
+        private static async Task<Portfolio> GetLoadedPortfolio(IPortfolioStore portfolioStore)
+        {
+            Portfolio loadedPortfolio = null;
+            // ReSharper disable once ConvertToLocalFunction
+            EventHandler<Portfolio> portfolioStoreOnPortfolioLoaded = (sender, portfolio) => { loadedPortfolio = portfolio; };
+            portfolioStore.PortfolioLoaded += portfolioStoreOnPortfolioLoaded;
 
-            action.Should().Throw<PortfolioStoreLoadException>();
+            await portfolioStore.Load();
+            portfolioStore.PortfolioLoaded -= portfolioStoreOnPortfolioLoaded;
+            return loadedPortfolio;
         }
     }
 }

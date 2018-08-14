@@ -30,7 +30,7 @@ namespace PortfolioTracker.PAS
         {
         }
 
-        public async void Load()
+        public async Task Load()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace PortfolioTracker.PAS
             }
         }
 
-        public async void Save(Portfolio portfolio)
+        public async Task Save(Portfolio portfolio)
         {
             try
             {

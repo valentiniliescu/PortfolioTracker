@@ -16,7 +16,13 @@ namespace PortfolioTracker.Model
         public PortfolioWithValue([NotNull] IPortfolioStore portfolioStore, [NotNull] QuoteLoaderDelegate quoteLoader)
         {
             _portfolioStore = portfolioStore;
+            _portfolioStore.PortfolioLoaded += _portfolioStore_PortfolioLoaded;
             _quoteLoader = quoteLoader;
+        }
+
+        private void _portfolioStore_PortfolioLoaded(object sender, Portfolio portfolio)
+        {
+            Portfolio = portfolio;
         }
 
         public PortfolioWithValue() : this(new InMemoryPortfolioStore(), DefaultQuoteLoader)
@@ -38,7 +44,7 @@ namespace PortfolioTracker.Model
 
         public async Task Load()
         {
-            Portfolio = await _portfolioStore.Load();
+            await _portfolioStore.Load();
         }
 
         public async Task Save()

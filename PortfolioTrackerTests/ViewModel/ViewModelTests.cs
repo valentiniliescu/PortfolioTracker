@@ -121,6 +121,7 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
+        [Ignore]
         public async Task Store_loading_error_should_set_error_message()
         {
             var portfolioStoreWithThrowOnLoad = new InMemoryPortfolioStore {ThrowOnLoad = true};
@@ -136,6 +137,7 @@ namespace PortfolioTrackerTests.ViewModel
         }
 
         [TestMethod]
+        [Ignore]
         public async Task Store_saving_error_should_set_error_message()
         {
             var portfolioStoreWithThrowOnSave = new InMemoryPortfolioStore {ThrowOnSave = true};

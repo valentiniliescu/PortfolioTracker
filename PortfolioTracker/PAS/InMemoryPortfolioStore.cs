@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.Model;
 
@@ -18,7 +19,7 @@ namespace PortfolioTracker.PAS
         public event EventHandler PortfolioSaved;
         public event EventHandler<PortfolioStoreSaveException> PortfolioErrorOnSave;
 
-        public void Load()
+        public Task Load()
         {
             if (ThrowOnLoad)
             {
@@ -31,9 +32,11 @@ namespace PortfolioTracker.PAS
             }
 
             PortfolioLoaded?.Invoke(this, _portfolio.Clone());
+
+            return Task.CompletedTask;
         }
 
-        public void Save(Portfolio portfolio)
+        public Task Save(Portfolio portfolio)
         {
             if (ThrowOnSave)
             {
@@ -43,6 +46,8 @@ namespace PortfolioTracker.PAS
             _portfolio = portfolio?.Clone();
 
             PortfolioSaved?.Invoke(this, EventArgs.Empty);
+
+            return Task.CompletedTask;
         }
     }
 }
