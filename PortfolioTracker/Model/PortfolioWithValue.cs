@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PortfolioTracker.PAS;
@@ -34,6 +33,7 @@ namespace PortfolioTracker.Model
         public decimal TotalValue { get; private set; }
 
         [CanBeNull]
+        [ProvidesContext]
         public Portfolio Portfolio { get; private set; }
 
         public async Task Load()
@@ -53,21 +53,7 @@ namespace PortfolioTracker.Model
 
         public async Task Calculate()
         {
-            if (Portfolio != null)
-            {
-                IEnumerable<Symbol> symbols = Portfolio.Assets.Select(asset => asset.Symbol);
-
-                // ReSharper disable once PossibleNullReferenceException
-                IEnumerable<Quote> quotes = await _quoteLoader(symbols);
-
-                TotalValue = Portfolio.Assets
-                    .Join(quotes, asset => asset.Symbol, quote => quote.Symbol, (asset, quote) => quote != null ? asset.Amount * quote.Price : 0)
-                    .Sum();
-            }
-            else
-            {
-                TotalValue = 0;
-            }
+            TotalValue = await PortfolioValueCalculator.Calculate(Portfolio, _quoteLoader);
         }
     }
 }

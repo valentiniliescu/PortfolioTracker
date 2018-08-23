@@ -1,7 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Model;
+using PortfolioTracker.PAS;
 
 namespace PortfolioTrackerTests.Model
 {
@@ -10,75 +13,77 @@ namespace PortfolioTrackerTests.Model
     public class PortfolioValueCalculatorTests
     {
         [TestMethod]
-        public void Calculate_should_return_the_portfolio_value()
+        public async Task Calculate_should_return_the_portfolio_value()
         {
-            var quotes = new[]
+            IEnumerable<Quote> quotes = new[]
             {
                 new Quote(new Symbol("MSFT"), 100),
                 new Quote(new Symbol("AAPL"), 200)
             };
+            // ReSharper disable once ConvertToLocalFunction
+            QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
             var portfolio = new Portfolio();
             portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
-            PortfolioValueCalculator.Calculate(portfolio, quotes).Should().Be(3000);
+            (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(3000);
         }
 
         [TestMethod]
-        public void Calculate_should_skip_assets_that_have_no_corresponding_quotes()
+        public async Task Calculate_should_skip_assets_that_have_no_corresponding_quotes()
         {
-            var quotes = new[]
+            IEnumerable<Quote> quotes = new[]
             {
                 new Quote(new Symbol("MSFT"), 100)
             };
+            // ReSharper disable once ConvertToLocalFunction
+            QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
             var portfolio = new Portfolio();
             portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
             portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
-            PortfolioValueCalculator.Calculate(portfolio, quotes).Should().Be(1000);
+            (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(1000);
         }
 
         [TestMethod]
-        public void Calculate_should_be_OK_if_there_are_more_quotes_than_assets()
+        public async Task Calculate_should_be_OK_if_there_are_more_quotes_than_assets()
         {
-            var quotes = new[]
+            IEnumerable<Quote> quotes = new[]
             {
                 new Quote(new Symbol("MSFT"), 100),
                 new Quote(new Symbol("AAPL"), 200)
             };
+            // ReSharper disable once ConvertToLocalFunction
+            QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
             var portfolio = new Portfolio();
             portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
 
-            PortfolioValueCalculator.Calculate(portfolio, quotes).Should().Be(1000);
+            (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(1000);
         }
 
         [TestMethod]
-        public void Calculate_should_return_zero_if_portfolio_has_no_assets()
+        public async Task Calculate_should_return_zero_if_portfolio_has_no_assets()
         {
-            var quotes = new Quote[0];
+            IEnumerable<Quote> quotes = new Quote[0];
+            // ReSharper disable once ConvertToLocalFunction
+            QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
             var portfolio = new Portfolio();
 
-            PortfolioValueCalculator.Calculate(portfolio, quotes).Should().Be(0);
+            (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(0);
         }
 
         [TestMethod]
-        public void Calculate_should_return_zero_if_portfolio_is_null()
+        public async Task Calculate_should_return_zero_if_portfolio_is_null()
         {
-            var quotes = new Quote[0];
+            IEnumerable<Quote> quotes = new Quote[0];
+            // ReSharper disable once ConvertToLocalFunction
+            QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
-            PortfolioValueCalculator.Calculate(null, quotes).Should().Be(0);
-        }
-
-        [TestMethod]
-        public void Calculate_should_return_zero_if_quotes_is_null()
-        {
-            var portfolio = new Portfolio();
-
-            PortfolioValueCalculator.Calculate(portfolio, null).Should().Be(0);
+            (await PortfolioValueCalculator.Calculate(null, quoteLoader)).Should().Be(0);
         }
     }
 }
