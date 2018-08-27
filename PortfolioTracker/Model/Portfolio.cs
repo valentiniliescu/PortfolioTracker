@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using JetBrains.Annotations;
 
 namespace PortfolioTracker.Model
 {
     public sealed class Portfolio
     {
-        [NotNull] private readonly IDictionary<Symbol, Asset> _assets;
+        [NotNull] private IImmutableDictionary<Symbol, Asset> _assets;
 
-        public Portfolio() : this(new Dictionary<Symbol, Asset>())
+        public Portfolio()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            _assets = ImmutableDictionary<Symbol,Asset>.Empty;
+   
         }
 
-        private Portfolio([NotNull] IDictionary<Symbol, Asset> assets)
+        private Portfolio([NotNull] IImmutableDictionary<Symbol, Asset> assets)
         {
             _assets = assets;
         }
@@ -25,7 +29,9 @@ namespace PortfolioTracker.Model
 
         [Pure]
         [NotNull]
-        public Portfolio Clone() => new Portfolio(new Dictionary<Symbol, Asset>(_assets));
+        // ReSharper disable once AssignNullToNotNullAttribute
+        // ReSharper disable once PossibleNullReferenceException
+        public Portfolio Clone() => new Portfolio(_assets);
 
         public void AddAsset([NotNull] Asset newAsset)
         {
@@ -39,11 +45,13 @@ namespace PortfolioTracker.Model
 
                 if (amount == 0)
                 {
-                    _assets.Remove(newAsset.Symbol);
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    _assets = _assets.Remove(newAsset.Symbol);
                 }
                 else
                 {
-                    _assets[newAsset.Symbol] = new Asset(newAsset.Symbol, amount);
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    _assets = _assets.SetItem(newAsset.Symbol, new Asset(newAsset.Symbol, amount));
                 }
             }
             else
@@ -55,7 +63,8 @@ namespace PortfolioTracker.Model
 
                 if (newAsset.Amount > 0)
                 {
-                    _assets[newAsset.Symbol] = newAsset;
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    _assets = _assets.SetItem(newAsset.Symbol, newAsset);
                 }
             }
         }

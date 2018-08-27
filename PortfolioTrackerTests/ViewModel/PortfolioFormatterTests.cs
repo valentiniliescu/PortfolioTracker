@@ -26,7 +26,7 @@ namespace PortfolioTrackerTests.ViewModel
             portfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
             portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
 
-            PortfolioFormatter.Format(portfolio).Should().Be("You have 100 MSFT, 10 AAPL shares");
+            PortfolioFormatter.Format(portfolio).Should().BeOneOf("You have 100 MSFT, 10 AAPL shares", "You have 10 AAPL, 100 MSFT shares");
         }
 
         [TestMethod]
