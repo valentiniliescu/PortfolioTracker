@@ -32,8 +32,7 @@ namespace PortfolioTrackerTests.PAS
         public async Task Loading_after_saving_should_return_portfolio_with_the_same_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
-            var savedPortfolio = new Portfolio();
-            savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
+            var savedPortfolio = new Portfolio(new Asset(new Symbol("MSFT"), 100));
             await portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio = await portfolioStore.Load();
@@ -47,8 +46,7 @@ namespace PortfolioTrackerTests.PAS
         public async Task Loading_without_saving_should_return_portfolios_with_the_same_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
-            var savedPortfolio = new Portfolio();
-            savedPortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
+            var savedPortfolio = new Portfolio(new Asset(new Symbol("MSFT"), 100));
             await portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio1 = await portfolioStore.Load();
@@ -63,14 +61,13 @@ namespace PortfolioTrackerTests.PAS
         public async Task Loading_with_saving_in_between_should_return_portfolios_with_different_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
-            var savePortfolio = new Portfolio();
-            savePortfolio.AddAsset(new Asset(new Symbol("MSFT"), 100));
-            await portfolioStore.Save(savePortfolio);
+            var savedPortfolio = new Portfolio(new Asset(new Symbol("MSFT"), 100));
+            await portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio1 = await portfolioStore.Load();
 
-            savePortfolio.AddAsset(new Asset(new Symbol("AAPL"), 100));
-            await portfolioStore.Save(savePortfolio);
+            savedPortfolio = savedPortfolio.AddAsset(new Asset(new Symbol("AAPL"), 100));
+            await portfolioStore.Save(savedPortfolio);
 
             Portfolio loadedPortfolio2 = await portfolioStore.Load();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using PortfolioTracker.Model;
@@ -15,16 +14,9 @@ namespace PortfolioTracker.PAS
 
         public override Portfolio ReadJson(JsonReader reader, Type objectType, Portfolio existingValue, bool hasExistingValue, [NotNull] JsonSerializer serializer)
         {
-            var portfolio = new Portfolio();
-
             var assets = serializer.Deserialize<Asset[]>(reader);
 
-            assets?
-                .Where(asset => asset != null)
-                .ToList()
-                .ForEach(portfolio.AddAsset);
-
-            return portfolio;
+            return new Portfolio(assets);
         }
     }
 }

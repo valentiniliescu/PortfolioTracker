@@ -11,13 +11,22 @@ namespace PortfolioTrackerTests.Model
     public class PortfolioTests
     {
         [TestMethod]
+        public void Constructor_should_add_assets()
+        {
+            var portfolio = new Portfolio(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
+
+            portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
+        }
+
+        [TestMethod]
         public void Assets_with_same_symbol_should_be_merged()
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
+            portfolio = portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 10))
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                .AddAsset(new Asset(new Symbol("MSFT"), 20));
 
             portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 30), new Asset(new Symbol("AAPL"), 10));
         }
@@ -27,10 +36,11 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-
-            Action action = () => portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
+            Action action = () => portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 10))
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+                .AddAsset(new Asset(new Symbol("MSFT"), -20));
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -40,9 +50,10 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-
-            Action action = () => portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
+            Action action = () => portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 10))
+                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+                .AddAsset(new Asset(new Symbol("MSFT"), -20));
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -52,9 +63,10 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), -10));
+            portfolio = portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 20))
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                .AddAsset(new Asset(new Symbol("MSFT"), -10));
 
             portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
         }
@@ -64,9 +76,10 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), -20));
+            portfolio = portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 20))
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                .AddAsset(new Asset(new Symbol("MSFT"), -20));
 
             portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("AAPL"), 10));
         }
@@ -76,9 +89,10 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 20));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 0));
+            portfolio = portfolio
+                .AddAsset(new Asset(new Symbol("MSFT"), 20))
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                .AddAsset(new Asset(new Symbol("MSFT"), 0));
 
             portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("MSFT"), 20), new Asset(new Symbol("AAPL"), 10));
         }
@@ -88,8 +102,9 @@ namespace PortfolioTrackerTests.Model
         {
             var portfolio = new Portfolio();
 
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 0));
+            portfolio = portfolio
+                .AddAsset(new Asset(new Symbol("AAPL"), 10))
+                .AddAsset(new Asset(new Symbol("MSFT"), 0));
 
             portfolio.Assets.Should().BeEquivalentTo(new Asset(new Symbol("AAPL"), 10));
         }

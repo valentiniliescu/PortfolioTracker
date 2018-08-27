@@ -23,9 +23,7 @@ namespace PortfolioTrackerTests.Model
             // ReSharper disable once ConvertToLocalFunction
             QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
-            var portfolio = new Portfolio();
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            var portfolio = new Portfolio(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
 
             (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(3000);
         }
@@ -40,9 +38,7 @@ namespace PortfolioTrackerTests.Model
             // ReSharper disable once ConvertToLocalFunction
             QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
-            var portfolio = new Portfolio();
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
-            portfolio.AddAsset(new Asset(new Symbol("AAPL"), 10));
+            var portfolio = new Portfolio(new Asset(new Symbol("MSFT"), 10), new Asset(new Symbol("AAPL"), 10));
 
             (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(1000);
         }
@@ -58,8 +54,7 @@ namespace PortfolioTrackerTests.Model
             // ReSharper disable once ConvertToLocalFunction
             QuoteLoaderDelegate quoteLoader = symbols => Task.FromResult(quotes);
 
-            var portfolio = new Portfolio();
-            portfolio.AddAsset(new Asset(new Symbol("MSFT"), 10));
+            var portfolio = new Portfolio(new Asset(new Symbol("MSFT"), 10));
 
             (await PortfolioValueCalculator.Calculate(portfolio, quoteLoader)).Should().Be(1000);
         }

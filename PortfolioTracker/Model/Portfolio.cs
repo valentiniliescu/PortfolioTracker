@@ -1,41 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace PortfolioTracker.Model
 {
     public sealed class Portfolio
     {
-        [NotNull] private IImmutableDictionary<Symbol, Asset> _assets;
+        [NotNull] private readonly IImmutableDictionary<Symbol, Asset> _assetsMap;
 
-        public Portfolio()
+        public Portfolio(params Asset[] assets)
         {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            _assets = ImmutableDictionary<Symbol,Asset>.Empty;
-   
+            // ReSharper disable AssignNullToNotNullAttribute
+            _assetsMap = assets.Aggregate<Asset, IImmutableDictionary<Symbol, Asset>>(ImmutableDictionary<Symbol, Asset>.Empty, AddAssetToMap);
+            // ReSharper restore AssignNullToNotNullAttribute
         }
 
-        private Portfolio([NotNull] IImmutableDictionary<Symbol, Asset> assets)
+        private Portfolio([NotNull] IImmutableDictionary<Symbol, Asset> assetsMap)
         {
-            _assets = assets;
+            _assetsMap = assetsMap;
         }
 
         [NotNull]
         [ItemNotNull]
-        public IEnumerable<Asset> Assets => _assets.Values;
+        public IEnumerable<Asset> Assets => _assetsMap.Values;
 
-        public bool HasAssets => _assets.Count > 0;
+        public bool HasAssets => _assetsMap.Count > 0;
 
         [Pure]
         [NotNull]
         // ReSharper disable once AssignNullToNotNullAttribute
         // ReSharper disable once PossibleNullReferenceException
-        public Portfolio Clone() => new Portfolio(_assets);
+        public Portfolio Clone() => new Portfolio(_assetsMap);
 
-        public void AddAsset([NotNull] Asset newAsset)
+        [Pure]
+        [NotNull]
+        public Portfolio AddAsset([NotNull] Asset newAsset) => new Portfolio(AddAssetToMap(_assetsMap, newAsset));
+
+        [Pure]
+        [NotNull]
+        private static IImmutableDictionary<Symbol, Asset> AddAssetToMap([NotNull] IImmutableDictionary<Symbol, Asset> assets, [NotNull] Asset newAsset)
         {
-            if (_assets.TryGetValue(newAsset.Symbol, out Asset existingAsset))
+            if (assets.TryGetValue(newAsset.Symbol, out Asset existingAsset))
             {
                 decimal amount = newAsset.Amount + existingAsset.Amount;
                 if (amount < 0)
@@ -46,27 +53,25 @@ namespace PortfolioTracker.Model
                 if (amount == 0)
                 {
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    _assets = _assets.Remove(newAsset.Symbol);
-                }
-                else
-                {
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    _assets = _assets.SetItem(newAsset.Symbol, new Asset(newAsset.Symbol, amount));
-                }
-            }
-            else
-            {
-                if (newAsset.Amount < 0)
-                {
-                    throw new InvalidOperationException("Cannot add an asset that will result in negative amount in portfolio");
+                    return assets.Remove(newAsset.Symbol);
                 }
 
-                if (newAsset.Amount > 0)
-                {
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    _assets = _assets.SetItem(newAsset.Symbol, newAsset);
-                }
+                // ReSharper disable once AssignNullToNotNullAttribute
+                return assets.SetItem(newAsset.Symbol, new Asset(newAsset.Symbol, amount));
             }
+
+            if (newAsset.Amount < 0)
+            {
+                throw new InvalidOperationException("Cannot add an asset that will result in negative amount in portfolio");
+            }
+
+            if (newAsset.Amount == 0)
+            {
+                return assets;
+            }
+
+            // ReSharper disable once AssignNullToNotNullAttribute
+            return assets.SetItem(newAsset.Symbol, newAsset);
         }
     }
 }

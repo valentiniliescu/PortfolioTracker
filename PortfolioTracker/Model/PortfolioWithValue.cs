@@ -48,7 +48,7 @@ namespace PortfolioTracker.Model
 
         public void AddAsset([NotNull] Asset newAsset)
         {
-            Portfolio?.AddAsset(newAsset);
+            Portfolio = Portfolio?.AddAsset(newAsset);
         }
 
         public async Task Calculate()
