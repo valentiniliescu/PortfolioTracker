@@ -6,13 +6,13 @@ namespace PortfolioTracker.Model
 {
     public sealed class Portfolio
     {
-        [NotNull] private readonly Dictionary<Symbol, Asset> _assets;
+        [NotNull] private readonly IDictionary<Symbol, Asset> _assets;
 
         public Portfolio() : this(new Dictionary<Symbol, Asset>())
         {
         }
 
-        private Portfolio([NotNull] Dictionary<Symbol, Asset> assets)
+        private Portfolio([NotNull] IDictionary<Symbol, Asset> assets)
         {
             _assets = assets;
         }
