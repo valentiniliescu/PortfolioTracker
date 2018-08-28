@@ -25,7 +25,7 @@ namespace PortfolioTracker.PAS
                 _portfolio = new Portfolio();
             }
 
-            return Task.FromResult(_portfolio.Clone());
+            return Task.FromResult(_portfolio);
         }
 
         public Task Save(Portfolio portfolio)
@@ -35,7 +35,7 @@ namespace PortfolioTracker.PAS
                 throw new PortfolioStoreSaveException("Error saving the store", new Exception());
             }
 
-            _portfolio = portfolio?.Clone();
+            _portfolio = portfolio;
 
             return Task.CompletedTask;
         }

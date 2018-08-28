@@ -13,7 +13,7 @@ namespace PortfolioTracker.Model
         public Portfolio(params Asset[] assets)
         {
             // ReSharper disable AssignNullToNotNullAttribute
-            _assetsMap = assets.Aggregate<Asset, IImmutableDictionary<Symbol, Asset>>(ImmutableDictionary<Symbol, Asset>.Empty, AddAssetToMap);
+            _assetsMap = assets.Aggregate<Asset, IImmutableDictionary<Symbol, Asset>>(ImmutableDictionary<Symbol, Asset>.Empty, MergeAssetWithMap);
             // ReSharper restore AssignNullToNotNullAttribute
         }
 
@@ -30,19 +30,13 @@ namespace PortfolioTracker.Model
 
         [Pure]
         [NotNull]
-        // ReSharper disable once AssignNullToNotNullAttribute
-        // ReSharper disable once PossibleNullReferenceException
-        public Portfolio Clone() => new Portfolio(_assetsMap);
+        public Portfolio AddAsset([NotNull] Asset newAsset) => new Portfolio(MergeAssetWithMap(_assetsMap, newAsset));
 
         [Pure]
         [NotNull]
-        public Portfolio AddAsset([NotNull] Asset newAsset) => new Portfolio(AddAssetToMap(_assetsMap, newAsset));
-
-        [Pure]
-        [NotNull]
-        private static IImmutableDictionary<Symbol, Asset> AddAssetToMap([NotNull] IImmutableDictionary<Symbol, Asset> assets, [NotNull] Asset newAsset)
+        private static IImmutableDictionary<Symbol, Asset> MergeAssetWithMap([NotNull] IImmutableDictionary<Symbol, Asset> assetsMap, [NotNull] Asset newAsset)
         {
-            if (assets.TryGetValue(newAsset.Symbol, out Asset existingAsset))
+            if (assetsMap.TryGetValue(newAsset.Symbol, out Asset existingAsset))
             {
                 decimal amount = newAsset.Amount + existingAsset.Amount;
                 if (amount < 0)
@@ -53,11 +47,11 @@ namespace PortfolioTracker.Model
                 if (amount == 0)
                 {
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    return assets.Remove(newAsset.Symbol);
+                    return assetsMap.Remove(newAsset.Symbol);
                 }
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                return assets.SetItem(newAsset.Symbol, new Asset(newAsset.Symbol, amount));
+                return assetsMap.SetItem(newAsset.Symbol, new Asset(newAsset.Symbol, amount));
             }
 
             if (newAsset.Amount < 0)
@@ -67,11 +61,11 @@ namespace PortfolioTracker.Model
 
             if (newAsset.Amount == 0)
             {
-                return assets;
+                return assetsMap;
             }
 
             // ReSharper disable once AssignNullToNotNullAttribute
-            return assets.SetItem(newAsset.Symbol, newAsset);
+            return assetsMap.SetItem(newAsset.Symbol, newAsset);
         }
     }
 }

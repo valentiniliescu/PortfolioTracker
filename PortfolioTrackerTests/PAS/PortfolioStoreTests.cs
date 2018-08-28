@@ -16,19 +16,6 @@ namespace PortfolioTrackerTests.PAS
         protected abstract IPortfolioStore CreatePortfolioStoreWithLoadError();
 
         [TestMethod]
-        public async Task Loading_twice_should_return_different_portfolios()
-        {
-            IPortfolioStore portfolioStore = CreatePortfolioStore();
-
-            Portfolio loadedPortfolio1 = await portfolioStore.Load();
-            Portfolio loadedPortfolio2 = await portfolioStore.Load();
-
-            loadedPortfolio1.Should().NotBeSameAs(loadedPortfolio2);
-
-            await portfolioStore.Save(null);
-        }
-
-        [TestMethod]
         public async Task Loading_after_saving_should_return_portfolio_with_the_same_assets()
         {
             IPortfolioStore portfolioStore = CreatePortfolioStore();
