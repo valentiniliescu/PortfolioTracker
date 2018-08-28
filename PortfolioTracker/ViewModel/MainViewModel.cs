@@ -59,7 +59,6 @@ namespace PortfolioTracker.ViewModel
             {
                 await _portfolioWithValue.Load();
                 OnPropertyChanged(nameof(PortfolioDescription));
-                await _portfolioWithValue.Calculate();
                 OnPropertyChanged(nameof(PortfolioValueDescription));
             }
             catch (PortfolioStoreLoadException exception)
@@ -92,9 +91,8 @@ namespace PortfolioTracker.ViewModel
             {
                 try
                 {
-                    _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
+                    await _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
                     OnPropertyChanged(nameof(PortfolioDescription));
-                    await _portfolioWithValue.Calculate();
                     OnPropertyChanged(nameof(PortfolioValueDescription));
                 }
                 catch (Exception exception)

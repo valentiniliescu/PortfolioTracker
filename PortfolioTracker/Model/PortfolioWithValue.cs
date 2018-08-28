@@ -39,6 +39,7 @@ namespace PortfolioTracker.Model
         public async Task Load()
         {
             Portfolio = await _portfolioStore.Load();
+            TotalValue = await PortfolioValueCalculator.Calculate(Portfolio, _quoteLoader);
         }
 
         public async Task Save()
@@ -46,13 +47,9 @@ namespace PortfolioTracker.Model
             await _portfolioStore.Save(Portfolio);
         }
 
-        public void AddAsset([NotNull] Asset newAsset)
+        public async Task AddAsset([NotNull] Asset newAsset)
         {
             Portfolio = Portfolio?.AddAsset(newAsset);
-        }
-
-        public async Task Calculate()
-        {
             TotalValue = await PortfolioValueCalculator.Calculate(Portfolio, _quoteLoader);
         }
     }
