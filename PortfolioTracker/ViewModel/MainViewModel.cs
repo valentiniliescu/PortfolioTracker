@@ -89,9 +89,10 @@ namespace PortfolioTracker.ViewModel
         {
             if (Portfolio != null && NewAssetSymbol != null)
             {
+                var newAsset = new Asset(new Symbol(NewAssetSymbol), NewAssetAmount);
                 try
                 {
-                    await _portfolioWithValue.AddAsset(new Asset(new Symbol(NewAssetSymbol), NewAssetAmount));
+                    await _portfolioWithValue.AddAsset(newAsset);
                     OnPropertyChanged(nameof(PortfolioDescription));
                     OnPropertyChanged(nameof(PortfolioValueDescription));
                 }
